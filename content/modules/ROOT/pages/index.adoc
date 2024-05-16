@@ -63,24 +63,30 @@ We anticipate support for more operating systems in the future. The system requi
 === Installing ilab
 
 The first thing we need to do is to source a Python virtual environment that will allow us to interact with the InstructLab command line tools.
-+
 
 . Activate the python venv environment by running the following commands:
 +
 
+[source,sh,role=execute,subs=attributes+]
+----
+cd ~/instructlab
+source venv/bin/activate
+----
++
+.Your Prompt should now look like this
+
 [source,sh]
 ----
-$ cd ~/instructlab
-$ source venv/bin/activate
+(venv) [instruct@instructlab instructlab]$ 
 ----
 +
 
 . Install the command line tool using the pip command
 +
 
-[source,sh]
+[source,sh,role=execute,subs=attributes+]
 ----
-(venv) $ pip3 install git+https://github.com/instructlab/instructlab.git@stable
+pip3 install git+https://github.com/instructlab/instructlab.git@stable
 
 ----
 +
@@ -90,16 +96,16 @@ NOTE: `pip install` may take some time, depending on the internet connection ava
 . From your venv environment, verify ilab is installed correctly by running the ilab command.
 +
 
-[source,sh]
+[source,sh,role=execute,subs=attributes+]
 ----
-(venv) $ ilab
+ilab
 ----
 +
 
 Assuming that everything has been installed correctly, you should see the following output:
 +
 
-[source,sh]
+[source,sh,role=execute,subs=attributes+]
 ----
 Usage: ilab [OPTIONS] COMMAND [ARGS]...
 
@@ -142,13 +148,12 @@ Now that we know that the command-line interface `ilab` is working correctly, th
 
 Step 1: Initialize ilab by running the following command:
 
-[source,sh]
+[source,sh,role=execute,subs=attributes+]
 ----
-(venv) $ ilab init
+ilab init
 ----
-
 .You should see the following output:
-[source,bash]
+[source,sh]
 ----
 Welcome to InstructLab CLI. This guide will help you to setup your environment.
 Please provide the following values to initiate the environment [press Enter for defaults]:
@@ -157,14 +162,14 @@ Path to taxonomy repo [taxonomy]:
 
 NOTE: When prompted to provide the path to the taxonomy repo, hit kbd:[ENTER] 
 
-[source,sh]
+[source,sh,role=execute,subs=attributes+]
 ----
 `taxonomy` seems to not exist or is empty. Should I clone git@github.com:instruct-lab/taxonomy.git for you? [y/N]: y
 ----
 
 NOTE: When asked if the CLI should clone the taxonomy repo, input 'y' as shown in the above output.
 
-[source,sh]
+[source,sh,role=execute,subs=attributes+]
 ----
 Cloning git@github.com:instruct-lab/taxonomy.git...
 Generating `config.yaml` in the current directory...
@@ -173,7 +178,7 @@ Initialization completed successfully, you're ready to start using `ilab`. Enjoy
 
 NOTE: When asked to enter a directory for the model file, use the default and hit <ENTER>
 
-[source,sh]
+[source,sh,role=execute,subs=attributes+]
 ----
 Path to your model [models/merlinite-7b-lab-Q4_K_M.gguf]:
 ----
@@ -185,9 +190,10 @@ Path to your model [models/merlinite-7b-lab-Q4_K_M.gguf]:
 === Download the model
 
 *Step 1*: Run the `ilab download` command.
-[source,sh]
+
+[source,sh,role=execute,subs=attributes+]
 ----
-(venv) $ ilab download --repository instructlab/granite-7b-lab-GGUF --filename=granite-7b-lab-Q4_K_M.gguf
+ilab download --repository instructlab/granite-7b-lab-GGUF --filename=granite-7b-lab-Q4_K_M.gguf
 ----
 
 The ilab download command downloads a model from the HuggingFace instructlab organization that we will use for this workshop. To avoid conference internet issues, we have already placed the model onto your machine.  The download command sees it and completes immediately.
@@ -212,9 +218,9 @@ Now that the model has been downloaded, we can serve and chat with the model. Se
 
 Serve the model by running the following command:
 
-[source,sh]
+[source,sh,role=execute,subs=attributes+]
 ----
-(venv) $ ilab serve --model-path ./models/granite-7b-lab-Q4_K_M.gguf
+ilab serve --model-path ./models/granite-7b-lab-Q4_K_M.gguf
 ----
 
 As you can see, the serve command can take an optional `-–model-path` argument. In this case, we want to serve the Merlinite model. If no model path is provided, the default value from the config.yaml file will be used. 
@@ -237,18 +243,23 @@ Note: You can open a new tab in your terminal by hitting the command-t keyboard 
 
 In the other terminal window, Issue the following commands:
 
-[source,sh]
+[source,sh,role=execute,subs=attributes+]
 ----
-$ cd ~/instructlab
-$ source venv/bin/activate
+cd ~/instructlab
+source venv/bin/activate
 ----
 
 Now that the environment is sourced, you can begin a chat session with the ilab chat command:
 
 
-[source,sh]
+[source,sh,role=execute,subs=attributes+]
 ----
 (venv) $ ilab chat -m models/granite-7b-lab-Q4_K_M.GGUF
+----
+.Your Prompt should now look like this
+[source,sh]
+----
+(venv) [instruct@instructlab instructlab]$ 
 ----
 
 At this point, you can interact with the model by asking it a question. Example:
@@ -275,13 +286,11 @@ Now that you have a working environment, let’s examine the model's abilities b
 
 Ask the model the following question using the ilab chat terminal that you have open:
 
-[source,sh]
+[source,sh,role=execute,subs=attributes+]
 ----
 >> What is the Instructlab project?
 ----
-
-The answer will almost certainly be incorrect, as shown in the following output:
-
+.The answer will almost certainly be incorrect, as shown in the following output:
 [source,sh]
 ----
 The Instructlab project, also known as the "Integrated Infrastructure Initiative for Life Sciences," is a collaborative effort between several European 
@@ -296,7 +305,7 @@ Let’s get to work and fix this.
 
 When you are done exploring the model, exit the chat by issuing the exit command:
 
-[source,sh]
+[source,sh,role=execute,subs=attributes+]
 ----
 >>> exit                                                                                    
 
@@ -319,10 +328,10 @@ We are now going to leverage the taxonomy model to teach the model the knowledge
 
 *Step 1*: Verify you have the taxonomy directory in the working directory you are in.
 
-[source,sh]
+[source,sh,role=execute,subs=attributes+]
 ----
-(venv) $ cd ~/instructlab
-(venv) $ ls -al
+cd ~/instructlab
+ls -al
 ----
 .you should see the taxonomy directory listed as shown below:
 [source,texinfo]
@@ -341,9 +350,9 @@ Now, we need to create a directory where we can place our files.
 
 *Step 2*: Create a directory to add new knowledge showing how to properly generate a knowledge on Instructlab 
 
-[source,sh]
+[source,sh,role=execute,subs=attributes+]
 ----
-(venv) $ mkdir -p ~/instructlab/taxonomy/knowledge/instructlab/overview
+mkdir -p ~/instructlab/taxonomy/knowledge/instructlab/overview
 ----
 
 *Step 3*: Add a new knowledge.
@@ -351,16 +360,16 @@ Now, we need to create a directory where we can place our files.
 The way the taxonomy approach works is that we provide a file, named qna.yaml, that contains a sample data set of questions and answers. This data set will be used in the process of creating many more synthetic data examples.  The important thing to understand about the qna.yaml file is that it must follow a specific schema for InstructLab to use it to synthetically generate more examples. 
 Instead of having to type a bunch of information in by hand, simply run the following command to copy the qna.yaml file to your taxonomy directory:
 
-[source,sh]
+[source,sh,role=execute,subs=attributes+]
 ----
-(venv) $ cp -av ~/files/qna.yaml ~/instructlab/taxonomy/knowledge/instructlab/overview
+cp -av ~/files/qna.yaml ~/instructlab/taxonomy/knowledge/instructlab/overview
 ----
 
 You can then verify the file was correctly copied by issuing the following command which will display the first 10 lines of the file:
 
-[source,sh]
+[source,sh,role=execute,subs=attributes+]
 ----
-(venv) $ head ~/instructlab/taxonomy/knowledge/instructlab/overview/qna.yaml
+head ~/instructlab/taxonomy/knowledge/instructlab/overview/qna.yaml
 ----
 
 During this workshop, we don’t expect you to type all of this information in by hand - we are including the content here for your reference:
@@ -436,9 +445,9 @@ InstructLab allows you to validate your taxonomy files before generating additio
 
 NOTE: Make sure you are still in the virtual environment indicated by the (venv) on the command line. If not, source the venv/bin/activate file again.
 
-[source,sh]
+[source,sh,role=execute,subs=attributes+]
 ----
-(venv) $  ilab diff
+ilab diff
 ----
 .You should see the following output:
 [source,sh]
@@ -462,17 +471,17 @@ Aborted!
 
 We will then serve the merlinite model, which will serve as the teacher model for the purposes of our synthetic data generation:
 
-[source,sh]
+[source,sh,role=execute,subs=attributes+]
 ----
-(venv) $ cd ~/instructlab
-(venv) $ ilab serve --model-path ./models/merlinite-7b-lab-Q4_K_M.gguf
+cd ~/instructlab
+ilab serve --model-path ./models/merlinite-7b-lab-Q4_K_M.gguf
 ----
 
 We will now run the command to generate the synthetic data:
 
-[source,sh]
+[source,sh,role=execute,subs=attributes+]
 ----
-(venv) $ ilab generate --num-instructions 5
+ilab generate --num-instructions 5
 ----
 
 After running this command, you should see the magic happen! InstructLab is now synthetically generating 5 examples based on the seed data you provided in the qna.yaml file. Take a look at the generated questions and answers to see what the model has created! 
@@ -578,23 +587,23 @@ At this point, we are ready to serve our model and test it out. Keep in mind tha
 
 NOTE: Make sure to stop the previous `ilab serve` command that may still have running in the other terminal tab.
 
-[source,sh]
+[source,sh,role=execute,subs=attributes+]
 ----
-(venv) $ ilab serve --model-path ~/instructlab/models/ggml-model-Q4_K_M.gguf
+ilab serve --model-path ~/instructlab/models/ggml-model-Q4_K_M.gguf
 ----
 
 NOTE: If you get an error message about not being able to bind to the address, simply kbd:[CTRL+C]  the `ilab serve` command that may still have running in your other terminal tab.
 
 Start up another chat session with it:
 
-[source,sh]
+[source,sh,role=execute,subs=attributes+]
 ----
-(venv) $ ilab chat -m models/ggml-model-Q4_K_M.gguf
+ilab chat -m models/ggml-model-Q4_K_M.gguf
 ----
 
 Verify the results by entering in the original prompt again:
 
-[source,sh]
+[source,sh,role=execute,subs=attributes+]
 ----
 What is the Instructlab project?
 ----
