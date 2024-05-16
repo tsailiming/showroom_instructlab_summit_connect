@@ -5,6 +5,9 @@ version: master
 nav:
   - modules/ROOT/nav.adoc
 
+experimental: true
+
+
 asciidoc:
   attributes:
     lab_name: "I'm the lab_name var"
