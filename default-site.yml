@@ -1,6 +1,6 @@
 ---
 site:
-  title: InstructLab (Red Hat Summit 2024)
+  title: InstructLab (Summit 2024 Lab)
   start_page: modules::index.adoc
 
 content:

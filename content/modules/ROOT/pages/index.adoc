@@ -155,8 +155,15 @@ ilab init
 .You should see the following output:
 [source,sh]
 ----
+Found config.yaml in the current directory, do you still want to continue? [y/N]: y
 Welcome to InstructLab CLI. This guide will help you to setup your environment.
 Please provide the following values to initiate the environment [press Enter for defaults]:
+----
+
+NOTE: When prompted to accept the `config.yaml`, hit kbd:[ENTER] 
+
+[source,sh]
+----
 Path to taxonomy repo [taxonomy]:
 ----
 
@@ -196,11 +203,11 @@ Path to your model [models/merlinite-7b-lab-Q4_K_M.gguf]:
 ilab download --repository instructlab/granite-7b-lab-GGUF --filename=granite-7b-lab-Q4_K_M.gguf
 ----
 
-The ilab download command downloads a model from the HuggingFace instructlab organization that we will use for this workshop. To avoid conference internet issues, we have already placed the model onto your machine.  The download command sees it and completes immediately.
+The ilab download command downloads a model from the HuggingFace instructlab organization that we will use for this workshop. 
 
 The output should look like the following:
 
-NOTE: *This command may not show the contents below due to the model being cached on the local machine.*
+NOTE: *This command may not show the contents if the model is being cached on the local machine.*
 
 [source,sh]
 ----
