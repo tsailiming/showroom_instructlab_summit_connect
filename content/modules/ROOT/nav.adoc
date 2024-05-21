@@ -1,4 +1,4 @@
-** xref:index.adoc[Summary of the project]
+** xref:index.adoc[InstructLab]
 *** xref:index.adoc#llms[What is a Large Language Model?]
 *** xref:index.adoc#instructlab[How does this relate to InstructLab?]
 ** xref:index.adoc#getting_started[Getting started]
@@ -9,5 +9,5 @@
 *** xref:index.adoc#chat[Chat with the model]
 *** xref:index.adoc#training[Training and interacting with the model]
 *** xref:index.adoc#taxononmy[Understanding Taxonomy]
+** xref:index.adoc##serve_new_model[Serving the new model]
 ** xref:index.adoc#conclusion[Conclusion]
-

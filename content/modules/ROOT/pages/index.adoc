@@ -1,7 +1,7 @@
 
 :experimental: true
 
-== Summary of the project
+== Summary of the Project
 
 Thanks for taking time to learn about and use InstructLab at Red Hat Summit. During this hands-on exercise, you will learn what InstructLab is and how you can contribute to the project. You will also learn how to leverage InstructLab to improve a Large Language Model (LLM), and train it using synthetic data generation.
 
@@ -587,7 +587,8 @@ Once the new data has been generated, the next step is to train the model with t
 
 Training using the newly generated data is a time and resource intensive task. Depending on the number of iterations desired, internet connection for safetensor downloading, and other factors, it can take from 5 minutes up to an hour. It is not required to train the model to continue with the lab as we will use an already trained model that was created using a generate step with 100 instructions. 
 
-=Serving the new model
+[#serve_new_model]
+== Serving the new model
 
 At this point, we are ready to serve our model and test it out. Keep in mind that we only generated 5 additional data points, so the results will vary, and we can’t guarantee the skill we are looking to add was generated with such a small sample size. For that reason, we are going to do a bit of a cooking-show style serving where we are going to serve a model using the exact steps we did in this workshop but with an instruction size of 100 instead of 5. This is simply due to the time constraints; otherwise, you would be sitting here for a few hours, and that isn’t going to make you happy. ;) 
 
