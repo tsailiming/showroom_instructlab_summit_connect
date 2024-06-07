@@ -174,7 +174,7 @@ NOTE: When prompted to provide the path to the taxonomy repo, hit kbd:[ENTER]
 `taxonomy` seems to not exist or is empty. Should I clone git@github.com:instruct-lab/taxonomy.git for you? [y/N]: y
 ----
 
-NOTE: When asked if the CLI should clone the taxonomy repo, input 'y' as shown in the above output.
+NOTE: If asked if the CLI should clone the taxonomy repo, input 'y' as shown in the above output.
 
 [source,sh]
 ----
@@ -227,15 +227,15 @@ Serve the model by running the following command:
 
 [source,sh,role=execute,subs=attributes+]
 ----
-ilab serve --model-path models/merlinite-7b-lab-Q4_K_M.gguf
+ilab serve --model-path models/granite-7b-lab-Q4_K_M.gguf
 ----
 
-As you can see, the serve command can take an optional `-–model-path` argument. In this case, we want to serve the Merlinite model. If no model path is provided, the default value from the config.yaml file will be used. 
+As you can see, the serve command can take an optional `-–model-path` argument. In this case, we want to serve the Granite model. If no model path is provided, the default value from the config.yaml file will be used. 
 Once the model is served and ready, you’ll see the following output:
 
 [source,sh]
 ----
-INFO 2024-04-23 17:16:53,903 lab.py:296 Using model './models/merlinite-7b-lab-Q4_K_M.gguf' with -1 gpu-layers and 4096 max context size.
+INFO 2024-04-23 17:16:53,903 lab.py:296 Using model '/models/granite-7b-lab-Q4_K_M.gguf' with -1 gpu-layers and 4096 max context size.
 INFO 2024-04-23 17:17:02,861 server.py:155 Starting server process, press CTRL+C to shutdown server...
 INFO 2024-04-23 17:17:02,861 server.py:156 After application startup complete see http://127.0.0.1:8000/docs for API.
 ----
@@ -266,7 +266,7 @@ Now that the environment is sourced, you can begin a chat session with the ilab 
 
 [source,sh,role=execute,subs=attributes+]
 ----
-ilab chat -m models/merlinite-7b-lab-Q4_K_M.gguf
+ilab chat -m models/granite-7b-lab-Q4_K_M.gguf
 ----
 
 
@@ -275,7 +275,7 @@ You should see a chat prompt
 [source,sh]
 ----
 ╭─────────────────────────────────────────────────────────────────────╮
-│ Welcome to Chat CLI w/ MODELS/merlinite-7b-lab-Q4_K_M.gguf (type /h for help)                                                                                                                                        
+│ Welcome to Chat CLI w/ MODELS/granite-7b-lab-Q4_K_M.gguf (type /h for help)                                                                                                                                        
 ╰─────────────────────────────────────────────────────────────────────╯
 >>> 
 ----
