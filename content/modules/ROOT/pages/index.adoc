@@ -266,7 +266,7 @@ Now that the environment is sourced, you can begin a chat session with the ilab 
 
 [source,sh,role=execute,subs=attributes+]
 ----
-ilab chat -m ./models/granite-7b-lab-Q4_K_M.GGUF
+ilab chat -m ./models/granite-7b-lab-Q4_K_M.gguf
 ----
 
 At this point, you can interact with the model by asking it a question. Example:
