@@ -174,7 +174,7 @@ NOTE: When prompted to provide the path to the taxonomy repo, hit kbd:[ENTER]
 `taxonomy` seems to not exist or is empty. Should I clone git@github.com:instruct-lab/taxonomy.git for you? [y/N]: y
 ----
 
-NOTE: When asked if the CLI should clone the taxonomy repo, input 'y' as shown in the above output.
+NOTE: If asked if the CLI should clone the taxonomy repo, input 'y' as shown in the above output.
 
 [source,sh]
 ----
@@ -227,15 +227,15 @@ Serve the model by running the following command:
 
 [source,sh,role=execute,subs=attributes+]
 ----
-ilab serve --model-path ./models/granite-7b-lab-Q4_K_M.gguf
+ilab serve --model-path models/granite-7b-lab-Q4_K_M.gguf
 ----
 
-As you can see, the serve command can take an optional `-–model-path` argument. In this case, we want to serve the Merlinite model. If no model path is provided, the default value from the config.yaml file will be used. 
+As you can see, the serve command can take an optional `-–model-path` argument. In this case, we want to serve the Granite model. If no model path is provided, the default value from the config.yaml file will be used. 
 Once the model is served and ready, you’ll see the following output:
 
 [source,sh]
 ----
-INFO 2024-04-23 17:16:53,903 lab.py:296 Using model './models/granite-7b-lab-Q4_K_M.gguf' with -1 gpu-layers and 4096 max context size.
+INFO 2024-04-23 17:16:53,903 lab.py:296 Using model '/models/granite-7b-lab-Q4_K_M.gguf' with -1 gpu-layers and 4096 max context size.
 INFO 2024-04-23 17:17:02,861 server.py:155 Starting server process, press CTRL+C to shutdown server...
 INFO 2024-04-23 17:17:02,861 server.py:156 After application startup complete see http://127.0.0.1:8000/docs for API.
 ----
@@ -266,23 +266,30 @@ Now that the environment is sourced, you can begin a chat session with the ilab 
 
 [source,sh,role=execute,subs=attributes+]
 ----
-ilab chat -m ./models/granite-7b-lab-Q4_K_M.gguf
+ilab chat -m models/granite-7b-lab-Q4_K_M.gguf
 ----
 
-At this point, you can interact with the model by asking it a question. Example:
-What is openshift in 20 words or less?
+
+You should see a chat prompt
 
 [source,sh]
 ----
 ╭─────────────────────────────────────────────────────────────────────╮
-│ Welcome to Chat CLI w/ MODELS/granite-7b-Q4_K_M.gguf (type /h for help)                                                                                                                                        
+│ Welcome to Chat CLI w/ MODELS/granite-7b-lab-Q4_K_M.gguf (type /h for help)                                                                                                                                        
 ╰─────────────────────────────────────────────────────────────────────╯
->>> What is openshift in 20 words or less?                                                                                                                                                                                         
-╭──────────────────models/granite-7b-Q4_K_M.gguf──────────────────╮
-│ OpenShift is a container app platform, built on K8s, automating deployment, scaling, 
-security for containerized apps in RHEL-based environments.
-╰───────────────────────────────────────────── elapsed 6.378 seconds ─╯
+>>> 
 ----
+
+
+At this point, you can interact with the model by asking it a question. Example:
+What is openshift in 20 words or less?
+
+[source,sh,role=execute,subs=attributes+]
+----
+What is openshift in 20 words or less?                                                                                                                                                                                         
+----
+
+
 
 Wait, wut? That was AWESOME!!!!! You now have your own local LLM running on this laptop. That was pretty easy, huh?
 
@@ -338,18 +345,21 @@ We are now going to leverage the taxonomy model to teach the model the knowledge
 [source,sh,role=execute,subs=attributes+]
 ----
 cd ~/instructlab
-ls -al
+tree taxonomy/  | head
 ----
 .you should see the taxonomy directory listed as shown below:
 [source,texinfo]
 ----
-drwxr-xr-x@  7 instruct  staff  224 Apr 24 18:25 .
-drwxr-xr-x  18 instruct  staff  576 Apr 24 15:29 ..
--rw-r--r--@  1 instruct  staff  554 Apr 24 09:04 config.yaml
-drwxr-xr-x@  3 instruct  staff   96 Apr 24 09:39 data
-drwxr-xr-x@  3 instruct  staff   96 Apr 24 18:18 models
-drwxr-xr-x@ 21 instruct  staff  672 Apr 24 09:04 taxonomy
-drwxr-xr-x@  7 instruct  staff  224 Apr 24 09:02 venv
+taxonomy/
+├── CODE_OF_CONDUCT.md
+├── compositional_skills
+│   ├── extraction
+│   │   ├── abstractive
+│   │   │   ├── abstract
+│   │   │   │   └── qna.yaml
+│   │   │   ├── key_points
+│   │   │   │   └── qna.yaml
+│   │   │   ├── main_takeaway
 ----
 
 Now, we need to create a directory where we can place our files.
@@ -378,7 +388,10 @@ You can then verify the file was correctly copied by issuing the following comma
 head ~/instructlab/taxonomy/knowledge/instructlab/overview/qna.yaml
 ----
 
-During this workshop, we don’t expect you to type all of this information in by hand - we are including the content here for your reference:
+During this workshop, we don’t expect you to type all of this information in by hand - we are including the content here for your reference.
+
+It's a YAML file that consists of a list of Q&A examples that will be used by the trainer model to teach the student model.  
+There is also a source document which is a link to a specific commit of a text file in git.
 
 
 [source,yaml]
@@ -483,7 +496,7 @@ cd ~/instructlab
 ilab serve --model-path models/merlinite-7b-lab-Q4_K_M.gguf
 ----
 
-We will now run the command to generate the synthetic data:
+We will now run the command (in the second Terminal) to generate the synthetic data:
 
 [source,sh,role=execute,subs=attributes+]
 ----
