@@ -86,7 +86,7 @@ source venv/bin/activate
 
 [source,sh,role=execute,subs=attributes+]
 ----
-pip3 install git+https://github.com/instructlab/instructlab.git@stable
+pip3 install git+https://github.com/instructlab/instructlab.git@v0.16.1
 
 ----
 +
