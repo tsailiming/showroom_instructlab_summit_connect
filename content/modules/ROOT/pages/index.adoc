@@ -86,7 +86,7 @@ source venv/bin/activate
 
 [source,sh,role=execute,subs=attributes+]
 ----
-pip3 install git+https://github.com/instructlab/instructlab.git@v0.16.1
+pip3 install git+https://github.com/instructlab/instructlab.git@v0.17.1
 
 ----
 +
@@ -150,7 +150,7 @@ Step 1: Initialize ilab by running the following command:
 
 [source,sh,role=execute,subs=attributes+]
 ----
-ilab init
+ilab config init
 ----
 .You should see the following output:
 [source,sh]
@@ -191,7 +191,7 @@ Path to your model [models/merlinite-7b-lab-Q4_K_M.gguf]:
 ----
 
 * Several things happen during the initialization phase: A default taxonomy is created on the local file system, and a configuration file (config.yaml) is created in the current directory.
-* The config.yaml file contains defaults we will use during this workshop. After Red Hat Summit, when you begin playing around with InstructLab, it is important to understand the contents of the configuration file so that you can tune the parameters to your liking
+* The config.yaml file contains defaults we will use during this workshop. After this workshop, when you begin playing around with InstructLab, it is important to understand the contents of the configuration file so that you can tune the parameters to your liking
 
 [#download]
 === Download the model
@@ -200,7 +200,7 @@ Path to your model [models/merlinite-7b-lab-Q4_K_M.gguf]:
 
 [source,sh,role=execute,subs=attributes+]
 ----
-ilab download --repository instructlab/granite-7b-lab-GGUF --filename=granite-7b-lab-Q4_K_M.gguf
+ilab model download --repository instructlab/granite-7b-lab-GGUF --filename=granite-7b-lab-Q4_K_M.gguf
 ----
 
 The ilab download command downloads a model from the HuggingFace instructlab organization that we will use for this workshop. 
@@ -227,7 +227,7 @@ Serve the model by running the following command:
 
 [source,sh,role=execute,subs=attributes+]
 ----
-ilab serve --model-path models/granite-7b-lab-Q4_K_M.gguf
+ilab model serve --model-path models/granite-7b-lab-Q4_K_M.gguf
 ----
 
 As you can see, the serve command can take an optional `-–model-path` argument. In this case, we want to serve the Granite model. If no model path is provided, the default value from the config.yaml file will be used. 
@@ -266,7 +266,7 @@ Now that the environment is sourced, you can begin a chat session with the ilab 
 
 [source,sh,role=execute,subs=attributes+]
 ----
-ilab chat -m models/granite-7b-lab-Q4_K_M.gguf
+ilab model chat -m models/granite-7b-lab-Q4_K_M.gguf
 ----
 
 
@@ -274,9 +274,9 @@ You should see a chat prompt
 
 [source,sh]
 ----
-╭─────────────────────────────────────────────────────────────────────╮
-│ Welcome to Chat CLI w/ MODELS/granite-7b-lab-Q4_K_M.gguf (type /h for help)                                                                                                                                        
-╰─────────────────────────────────────────────────────────────────────╯
+╭───────────────────────────────────────────────────────────────────────────╮
+│ Welcome to Chat CLI w/ MODELS/GRANITE-7B-LAB-Q4_K_M.GGUF (type /h for help)                                                                                                                                        
+╰───────────────────────────────────────────────────────────────────────────╯
 >>> 
 ----
 
@@ -322,8 +322,6 @@ When you are done exploring the model, exit the chat by issuing the exit command
 [source,sh,role=execute,subs=attributes+]
 ----
 >>> exit                                                                                    
-
-Aborted!
 ----
 
 This is where the real fun begins! We are now going to improve the model by leveraging the Taxonomy structure that is part of the InstructLab project.
@@ -353,13 +351,13 @@ tree taxonomy/  | head
 taxonomy/
 ├── CODE_OF_CONDUCT.md
 ├── compositional_skills
-│   ├── extraction
-│   │   ├── abstractive
-│   │   │   ├── abstract
-│   │   │   │   └── qna.yaml
-│   │   │   ├── key_points
-│   │   │   │   └── qna.yaml
-│   │   │   ├── main_takeaway
+│   ├── arts
+│   ├── engineering
+│   ├── geography
+│   ├── grounded
+│   │   ├── arts
+│   │   ├── engineering
+│   │   ├── geography
 ----
 
 Now, we need to create a directory where we can place our files.
@@ -466,7 +464,7 @@ NOTE: Make sure you are still in the virtual environment indicated by the (venv)
 
 [source,sh,role=execute,subs=attributes+]
 ----
-ilab diff
+ilab taxonomy diff
 ----
 .You should see the following output:
 [source,sh]
@@ -493,17 +491,17 @@ We will then serve the merlinite model, which will serve as the teacher model fo
 [source,sh,role=execute,subs=attributes+]
 ----
 cd ~/instructlab
-ilab serve --model-path models/merlinite-7b-lab-Q4_K_M.gguf
+ilab model serve --model-path models/merlinite-7b-lab-Q4_K_M.gguf
 ----
 
 We will now run the command (in the second Terminal) to generate the synthetic data:
 
 [source,sh,role=execute,subs=attributes+]
 ----
-ilab generate --num-instructions 5
+ilab data generate --num-instructions 5
 ----
 
-After running this command, you should see the magic happen! InstructLab is now synthetically generating 5 examples based on the seed data you provided in the qna.yaml file. Take a look at the generated questions and answers to see what the model has created! 
+After running this command, you should see the magic happen! InstructLab is now synthetically generating 5 examples based on the seed data you provided in the qna.yaml file. This will take a few minutes. Take a look at the generated questions and answers to see what the model has created! 
 
 [source,sh]
 ----
@@ -605,20 +603,20 @@ Training using the newly generated data is a time and resource intensive task. D
 
 At this point, we are ready to serve our model and test it out. Keep in mind that we only generated 5 additional data points, so the results will vary, and we can’t guarantee the skill we are looking to add was generated with such a small sample size. For that reason, we are going to do a bit of a cooking-show style serving where we are going to serve a model using the exact steps we did in this workshop but with an instruction size of 100 instead of 5. This is simply due to the time constraints; otherwise, you would be sitting here for a few hours, and that isn’t going to make you happy. ;) 
 
-NOTE: Make sure to stop the previous `ilab serve` command that may still have running in the other terminal tab.
+NOTE: Make sure to stop the previous `ilab model serve` command that may still have running in the other terminal tab.
 
 [source,sh,role=execute,subs=attributes+]
 ----
-ilab serve --model-path models/ggml-ilab-pretrained-Q4_K_M.gguf
+ilab model serve --model-path models/ggml-ilab-pretrained-Q4_K_M.gguf
 ----
 
-NOTE: If you get an error message about not being able to bind to the address, simply kbd:[CTRL+C]  the `ilab serve` command that may still have running in your other terminal tab.
+NOTE: If you get an error message about not being able to bind to the address, simply kbd:[CTRL+C]  the `ilab model serve` command that may still have running in your other terminal tab. 
 
-Start up another chat session with it:
+Start up another chat session with it. You will add the kbd:[--greedy-mode] flag to minimize any potential response randomness or variation in the generated response:
 
 [source,sh,role=execute,subs=attributes+]
 ----
-ilab chat -m models/ggml-ilab-pretrained-Q4_K_M.gguf
+ilab model chat --greedy-mode -m models/ggml-ilab-pretrained-Q4_K_M.gguf
 ----
 
 Verify the results by entering in the original prompt again:
@@ -644,7 +642,7 @@ significant strides in the generative AI landscape, and its impact on the future
 latest developments, join the community, contribute, or simply explore the platform, and help shape the future of generative AI with us!
 ----
 
-Woohoo young padawan, mission accomplished. May the 4th be with you, oh wait - May the 4th was a few days ago. Sorry. Move along.
+Woohoo young padawan, mission accomplished.
 
 [#conclusion]
 == Conclusion
