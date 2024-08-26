@@ -372,6 +372,9 @@ mkdir -p ~/instructlab/taxonomy/knowledge/instructlab/overview
 *Step 3*: Add a new knowledge.
 
 The way the taxonomy approach works is that we provide a file, named qna.yaml, that contains a sample data set of questions and answers. This data set will be used in the process of creating many more synthetic data examples.  The important thing to understand about the qna.yaml file is that it must follow a specific schema for InstructLab to use it to synthetically generate more examples. 
+
+The qna.yaml file is placed in a folder within the 'knowledge' subdirectory of the taxonomy directory. It is placed in a folder with an appropriate name that is aligned with the data topic, as you will see in the below command.
+
 Instead of having to type a bunch of information in by hand, simply run the following command to copy the qna.yaml file to your taxonomy directory:
 
 [source,sh,role=execute,subs=attributes+]
