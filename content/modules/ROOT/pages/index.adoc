@@ -4,7 +4,7 @@
 :imagesdir: ../assets/images
 :toc: false
 
-== Summary of the Lab
+== Introduction to the Lab
 
 Thanks for taking time to learn about and use RHEL AI at Red Hat Summit Connect. During this hands-on exercise, you will learn what RHEL AI is and how you can use it to provide value to your company. You will also learn how to leverage RHEL AI to improve a Large Language Model (LLM), and train it using synthetic data generation.  RHEL AI consists of several core components:
 
