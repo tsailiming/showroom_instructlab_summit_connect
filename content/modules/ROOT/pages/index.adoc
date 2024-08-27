@@ -88,19 +88,6 @@ source venv/bin/activate
 (venv) [instruct@instructlab instructlab]$ 
 ----
 +
-
-. Install the command line tool using the pip command
-+
-
-[source,sh,role=execute,subs=attributes+]
-----
-pip3 install git+https://github.com/instructlab/instructlab.git@v0.17.1
-
-----
-+
-
-NOTE: `pip install` may take some time, depending on the internet connection available at the conference or if the files have been cached locally.
-
 . From your venv environment, verify ilab is installed correctly by running the ilab command.
 +
 
