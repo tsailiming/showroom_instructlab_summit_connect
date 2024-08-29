@@ -1,13 +1,6 @@
-== Welcome to the Red Hat Summit 2024 Showroom Template
+== RHEL AI and InstructLab: Get a taste in training your own model
 
-This git repo template was created to make it easy for you to start developing your lab instructions.
-
-Features:
-
-. 0% cruft
-. Red Hat Summit 2024 UI bundle
-. Dev Mode extension that displays the asciidoc attributes you have to work with
-. Content is generated using Antora, a static site generator for creating documentation sites from AsciiDoc documents.
+This lab provides a hands-on experience with RHEL AI and InstructLab, guiding you through the process of understanding, training, and improving Large Language Models.
 
 == Getting Started
 
