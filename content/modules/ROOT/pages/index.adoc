@@ -41,7 +41,7 @@ Large language models (LLMs) are typically trained using deep learning technique
 . *Pre-processing*: The raw text data is pre-processed to remove noise, inconsistencies, and irrelevant information. This may include tokenization, lowercasing, stemming, lemmatization, and encoding.
 . *Tokenization*: The pre-processed text data is converted into tokens (words or subwords) that can be used as input and output to the model. Some models use byte-pair encoding (BPE) or subword segmentation to create tokens that can handle out-of-vocabulary words and maintain contextual information.
 . *Pre-training*: The model is trained in an unsupervised or self-supervised manner to learn patterns and structures in the data.
-. *Model Alignment*: (instruction tuning and preference tuning): The process of encoding human values and goals into large language models to make them as helpful, safe, and reliable as possible. This step is not as compute intensive as some of the other steps. 
+. *Model Alignment*: (instruction tuning and preference tuning): The process of encoding human values and goals into large language models to make them as helpful, safe, and reliable as possible. This step is not as compute intensive as some of the other steps.
 
 [#instructlab]
 === How does this relate to InstructLab?
@@ -85,9 +85,22 @@ source venv/bin/activate
 
 [source,sh]
 ----
-(venv) [instruct@instructlab instructlab]$ 
+(venv) [instruct@instructlab instructlab]$
 ----
 +
+
+. Install the command line tool using the pip command
++
+
+[source,sh,role=execute,subs=attributes+]
+----
+pip3 install git+https://github.com/instructlab/instructlab.git@v0.17.1
+
+----
++
+
+NOTE: `pip install` may take some time, depending on the internet connection available at the conference or if the files have been cached locally.
+
 . From your venv environment, verify ilab is installed correctly by running the ilab command.
 +
 
@@ -148,14 +161,14 @@ Step 1: Initialize ilab by running the following command:
 ilab config init
 ----
 .You should see the following output:
-[source,sh]
+[subs=quotes]
 ----
-Found config.yaml in the current directory, do you still want to continue? [y/N]: y
+Found config.yaml in the current directory, do you still want to continue? [y/N]: **y**
 Welcome to InstructLab CLI. This guide will help you to setup your environment.
 Please provide the following values to initiate the environment [press Enter for defaults]:
 ----
 
-NOTE: When prompted to accept the `config.yaml`, hit kbd:[ENTER] 
+NOTE: When prompted to accept the `config.yaml`, hit kbd:[ENTER]
 
 [source,sh]
 ----
@@ -206,7 +219,7 @@ NOTE: *This command may not show the contents if the model is being cached on th
 
 [source,sh]
 ----
-Downloading model from downloading model from instructlab/granite-7b-lab-GGUF@main to models...                                                                                                                                                 
+Downloading model from downloading model from instructlab/granite-7b-lab-GGUF@main to models...
 Downloading 'granite-7b-lab-Q4_K_M.gguf' to 'models/.huggingface/download/granite-7b-lab-Q4_K_M.gguf.6adeaad8c048b35ea54562c55e454cc32c63118a32c7b8152cf706b290611487.incomplete'
 INFO 2024-05-06 16:46:24,394 file_download.py:1877 Downloading 'granite-7b-lab-Q4_K_M.gguf' to 'models/.huggingface/download/granite-7b-lab-Q4_K_M.gguf.6adeaad8c048b35ea54562c55e454cc32c63118a32c7b8152cf706b290611487.incomplete'100%|█████████████████████████████████████████████████████████████| 4.08G/4.08G [00:36<00:00, 110MB/s]
 
@@ -271,7 +284,7 @@ You should see a chat prompt
 [source,sh]
 ----
 ╭───────────────────────────────────────────────────────────────────────────╮
-│ Welcome to Chat CLI w/ MODELS/GRANITE-7B-LAB-Q4_K_M.GGUF (type /h for help)                                                                                                                                        
+│ Welcome to Chat CLI w/ MODELS/GRANITE-7B-LAB-Q4_K_M.GGUF (type /h for help)                                                                                                                            
 ╰───────────────────────────────────────────────────────────────────────────╯
 >>> 
 ----
@@ -347,9 +360,10 @@ We are now going to leverage the taxonomy model to teach the model the knowledge
 [source,sh,role=execute,subs=attributes+]
 ----
 cd ~/instructlab
-ls -al
+tree
 ----
-.you should see the taxonomy directory listed as shown below:
+
+.You should see the taxonomy directory listed as shown below:
 [source,texinfo]
 ----
 taxonomy/
