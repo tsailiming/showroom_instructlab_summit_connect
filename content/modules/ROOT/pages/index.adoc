@@ -170,28 +170,30 @@ Welcome to InstructLab CLI. This guide will help you to setup your environment.
 Please provide the following values to initiate the environment [press Enter for defaults]:
 ----
 
-NOTE: When prompted to accept the `config.yaml`, hit kbd:[ENTER]
+NOTE: While traditionally you'll be prompted to download the taxonomy and configure options, here you can just it kbd:[ENTER] for the default settings.
 
-[subs=quotes]
-----
-Path to taxonomy repo [taxonomy]:
-----
+// When prompted to accept the `config.yaml`, hit kbd:[ENTER]
 
-NOTE: When prompted to provide the path to the taxonomy repo, hit kbd:[ENTER] 
+// [subs=quotes]
+// ----
+// Path to taxonomy repo [taxonomy]:
+// ----
 
-[subs=quotes]
-----
-`taxonomy` seems to not exist or is empty. Should I clone git@github.com:instruct-lab/taxonomy.git for you? [y/N]: y
-----
+// NOTE: When prompted to provide the path to the taxonomy repo, hit kbd:[ENTER] 
 
-NOTE: If asked if the CLI should clone the taxonomy repo, input 'y' as shown in the above output.
+// [subs=quotes]
+// ----
+// `taxonomy` seems to not exist or is empty. Should I clone git@github.com:instruct-lab/taxonomy.git for you? [y/N]: y
+// ----
 
-[source,sh]
-----
-Path to your model [models/merlinite-7b-lab-Q4_K_M.gguf]:
-----
+// NOTE: If asked if the CLI should clone the taxonomy repo, input 'y' as shown in the above output.
 
-NOTE: When asked to enter a directory for the model file, use the default and hit <ENTER>
+// [source,sh]
+// ----
+// Path to your model [models/merlinite-7b-lab-Q4_K_M.gguf]:
+// ----
+
+// NOTE: When asked to enter a directory for the model file, use the default and hit <ENTER>
 
 [subs=quotes]
 ----
@@ -200,7 +202,7 @@ Generating `config.yaml` in the current directory...
 Initialization completed successfully, you're ready to start using `ilab`. Enjoy!
 ----
 
-* Several things happen during the initialization phase: A default taxonomy is created on the local file system, and a configuration file (config.yaml) is created in the current directory.
+* Several things happen during the initialization phase: A default taxonomy is located on the local file system, and a configuration file (config.yaml) is created in the current directory.
 * The config.yaml file contains defaults we will use during this workshop. After this workshop, when you begin playing around with InstructLab, it is important to understand the contents of the configuration file so that you can tune the parameters to your liking
 
 [#download]
