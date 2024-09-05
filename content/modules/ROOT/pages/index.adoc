@@ -3,6 +3,7 @@
 :experimental: true
 :imagesdir: ../assets/images
 :toc: false
+:numbered: true
 
 == Introduction to the Lab
 
@@ -20,11 +21,11 @@ InstructLab is a fully open-source project from Red Hat, and the MIT-IBM Watson 
 
 A large language model (LLM) is a type of artificial intelligence (AI) model that uses deep learning techniques to understand and generate human-like text based on input data. These models are designed to analyze vast amounts of text data and learn patterns, relationships, and structures within the data. They can be used for various natural language processing (NLP) tasks, such as:
 
-. *Text classification*: Categorizing text based on its content, such as spam detection or sentiment analysis.
-. *Text summarization*: Generating concise summaries of longer texts, such as news articles or research papers.
-. *Machine translation*: Translating text from one language to another, such as English to French or German to Chinese.
-. *Question answering*: Answering questions based on a given context or set of documents.
-. *Text generation*: Creating new text that is coherent, contextually relevant, and grammatically correct, such as writing articles, stories, or even poetry.
+* *Text classification*: Categorizing text based on its content, such as spam detection or sentiment analysis.
+* *Text summarization*: Generating concise summaries of longer texts, such as news articles or research papers.
+* *Machine translation*: Translating text from one language to another, such as English to French or German to Chinese.
+* *Question answering*: Answering questions based on a given context or set of documents.
+* *Text generation*: Creating new text that is coherent, contextually relevant, and grammatically correct, such as writing articles, stories, or even poetry.
 
 Large language models typically have many parameters (millions to billions) that allow them to capture complex linguistic patterns and relationships in the data. They are trained on large datasets, such as books, articles, and websites, using techniques like unsupervised pre-training and supervised fine-tuning. Some popular large language models include GPT-4, Llama, and Mistral.
 
@@ -70,9 +71,9 @@ We anticipate support for more operating systems in the future. The system requi
 [#installation]
 === Installing ilab
 
-The first thing we need to do is to source a Python virtual environment that will allow us to interact with the InstructLab command line tools.
+The first thing we need to do is to source a Python virtual environment that will allow us to interact with the InstructLab command line tools. While you have two terminal windows available on your right, let's start with the *upper* window. 
 
-. Activate the python venv environment by running the following commands:
+. Activate the python virtual environment by running the following commands:
 +
 
 [source,sh,role=execute,subs=attributes+]
@@ -83,24 +84,25 @@ source venv/bin/activate
 +
 .Your Prompt should now look like this
 
-[source,sh]
+[subs=quotes]
 ----
 (venv) [instruct@instructlab instructlab]$
 ----
 +
 
-. Install the command line tool using the pip command
-+
+// . Install the command line tool using the pip command
+// +
 
-[source,sh,role=execute,subs=attributes+]
-----
-pip3 install git+https://github.com/instructlab/instructlab.git@v0.17.1
+// [source,sh,role=execute,subs=attributes+]
+// ----
+// pip3 install git+https://github.com/instructlab/instructlab.git@v0.17.1
 
-----
-+
+// ----
+// +
 
-NOTE: `pip install` may take some time, depending on the internet connection available at the conference or if the files have been cached locally.
+// NOTE: `pip install` may take some time, depending on the internet connection available at the conference or if the files have been cached locally.
 
+[start=2]
 . From your venv environment, verify ilab is installed correctly by running the ilab command.
 +
 
@@ -113,7 +115,7 @@ ilab
 Assuming that everything has been installed correctly, you should see the following output:
 +
 
-[source,sh,role=execute,subs=attributes+]
+[subs=quotes]
 ----
 Usage: ilab [OPTIONS] COMMAND [ARGS]...
 
@@ -170,14 +172,14 @@ Please provide the following values to initiate the environment [press Enter for
 
 NOTE: When prompted to accept the `config.yaml`, hit kbd:[ENTER]
 
-[source,sh]
+[subs=quotes]
 ----
 Path to taxonomy repo [taxonomy]:
 ----
 
 NOTE: When prompted to provide the path to the taxonomy repo, hit kbd:[ENTER] 
 
-[source,sh]
+[subs=quotes]
 ----
 `taxonomy` seems to not exist or is empty. Should I clone git@github.com:instruct-lab/taxonomy.git for you? [y/N]: y
 ----
@@ -186,16 +188,16 @@ NOTE: If asked if the CLI should clone the taxonomy repo, input 'y' as shown in 
 
 [source,sh]
 ----
-Cloning git@github.com:instruct-lab/taxonomy.git...
-Generating `config.yaml` in the current directory...
-Initialization completed successfully, you're ready to start using `ilab`. Enjoy!
+Path to your model [models/merlinite-7b-lab-Q4_K_M.gguf]:
 ----
 
 NOTE: When asked to enter a directory for the model file, use the default and hit <ENTER>
 
-[source,sh]
+[subs=quotes]
 ----
-Path to your model [models/merlinite-7b-lab-Q4_K_M.gguf]:
+Cloning git@github.com:instruct-lab/taxonomy.git...
+Generating `config.yaml` in the current directory...
+Initialization completed successfully, you're ready to start using `ilab`. Enjoy!
 ----
 
 * Several things happen during the initialization phase: A default taxonomy is created on the local file system, and a configuration file (config.yaml) is created in the current directory.
@@ -211,20 +213,16 @@ Path to your model [models/merlinite-7b-lab-Q4_K_M.gguf]:
 ilab model download --repository instructlab/granite-7b-lab-GGUF --filename=granite-7b-lab-Q4_K_M.gguf
 ----
 
-The ilab download command downloads a model from the HuggingFace instructlab organization that we will use for this workshop. 
+The ilab download command downloads a model from the HuggingFace instructlab organization that we will use for this workshop. The output should look like the following:
 
-The output should look like the following:
+// NOTE: *This command may not show the contents if the model is being cached on the local machine.*
 
-NOTE: *This command may not show the contents if the model is being cached on the local machine.*
-
-[source,sh]
+[subs=quotes]
 ----
 Downloading model from downloading model from instructlab/granite-7b-lab-GGUF@main to models...
 Downloading 'granite-7b-lab-Q4_K_M.gguf' to 'models/.huggingface/download/granite-7b-lab-Q4_K_M.gguf.6adeaad8c048b35ea54562c55e454cc32c63118a32c7b8152cf706b290611487.incomplete'
 INFO 2024-05-06 16:46:24,394 file_download.py:1877 Downloading 'granite-7b-lab-Q4_K_M.gguf' to 'models/.huggingface/download/granite-7b-lab-Q4_K_M.gguf.6adeaad8c048b35ea54562c55e454cc32c63118a32c7b8152cf706b290611487.incomplete'100%|█████████████████████████████████████████████████████████████| 4.08G/4.08G [00:36<00:00, 110MB/s]
-
 ----
-
 
 Now that the model has been downloaded, we can serve and chat with the model. Serving the model simply means we are going to run a server that will allow other programs to interact with the data similar to making an API call. 
 
@@ -241,7 +239,7 @@ ilab model serve --model-path models/granite-7b-lab-Q4_K_M.gguf
 As you can see, the serve command can take an optional `-–model-path` argument. In this case, we want to serve the Granite model. If no model path is provided, the default value from the config.yaml file will be used. 
 Once the model is served and ready, you’ll see the following output:
 
-[source,sh]
+[subs=quotes]
 ----
 INFO 2024-04-23 17:16:53,903 lab.py:296 Using model '/models/granite-7b-lab-Q4_K_M.gguf' with -1 gpu-layers and 4096 max context size.
 INFO 2024-04-23 17:17:02,861 server.py:155 Starting server process, press CTRL+C to shutdown server...
@@ -289,7 +287,6 @@ You should see a chat prompt
 >>> 
 ----
 
-
 At this point, you can interact with the model by asking it a question. Example:
 What is openshift in 20 words or less?
 
@@ -298,7 +295,7 @@ What is openshift in 20 words or less?
 What is openshift in 20 words or less?
 ----
 
-Wait, wut? That was AWESOME!!!!! You now have your own local LLM running on this laptop. That was pretty easy, huh?
+Wait, wut? That was AWESOME!!!!! You now have your own local LLM running on this machine. That was pretty easy, huh?
 
 [#integrating_instructlab]
 == Integrating AI into an Insurance Application
@@ -340,7 +337,7 @@ You should see something similar to the following. Note that LLMs by nature are 
 
 image::parasol-chat-response.webp[width=350]
 
-Unfortunately the chatbot doesn't know how much it costs to repair a flux capacitor. With InstructLab and RHEL-AI, we can change that by teaching the model!
+What we've already started to do is provide contextual information about the claim in each conversation with the LLM using Prompt Engineering. But unfortunately, the chatbot doesn't know how much it costs to repair a flux capacitor. With InstructLab and RHEL-AI, we can change that by teaching the model!
 
 [#taxononmy]
 === Understanding the Taxonomy
@@ -360,7 +357,7 @@ We are now going to leverage the taxonomy model to teach the model the knowledge
 [source,sh,role=execute,subs=attributes+]
 ----
 cd ~/instructlab
-tree
+tree taxonomy | head -n 10
 ----
 
 .You should see the taxonomy directory listed as shown below:
@@ -409,8 +406,7 @@ head ~/instructlab/taxonomy/knowledge/parasol/claims/qna.yaml
 
 During this workshop, we don’t expect you to type all of this information in by hand - we are including the content here for your reference.
 
-It's a YAML file that consists of a list of Q&A examples that will be used by the trainer model to teach the student model. There is also a source document which is a link to a specific commit of a text file in git.
-
+It's a YAML file that consists of a list of Q&A examples that will be used by the trainer model to teach the student model. There is also a source document which is a link to a specific commit of a text file in git, where https://github.com/gshipley/backToTheFuture/blob/main/data.md[we've included] that a flux capacitor costs an affordable $10,000,000.
 
 [source,yaml]
 ----
