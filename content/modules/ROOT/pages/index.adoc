@@ -230,7 +230,7 @@ Now that the model has been downloaded, we can serve and chat with the model. Se
 [#serve]
 === Serving the model
 
-Serve the model by running the following command:
+Let's serve the model by running the following command:
 
 [source,sh,role=execute,subs=attributes+]
 ----
@@ -256,7 +256,7 @@ Because you’re serving the model in one terminal window, you will have to crea
 
 // Note: You can open a new tab in your terminal by hitting the command-t keyboard combination. If you need assistance, please ask a Red Hatter in the InstructLab Lounge.
 
-In the bottom terminal window, Issue the following commands:
+. In the bottom terminal window, issue the following commands:
 
 [source,sh,role=execute,subs=attributes+]
 ----
@@ -269,16 +269,15 @@ source venv/bin/activate
 (venv) [instruct@instructlab instructlab]$ 
 ----
 
-Now that the environment is sourced, you can begin a chat session with the ilab chat command:
-
+[start=2]
+. Now that the environment is sourced, you can begin a chat session with the ilab chat command:
 
 [source,sh,role=execute,subs=attributes+]
 ----
 ilab model chat -m models/granite-7b-lab-Q4_K_M.gguf
 ----
 
-
-You should see a chat prompt
+You should see a chat prompt like the example below.
 
 [source,sh]
 ----
@@ -288,7 +287,8 @@ You should see a chat prompt
 >>> 
 ----
 
-At this point, you can interact with the model by asking it a question. Example:
+[start=3]
+. At this point, you can interact with the model by asking it a question. Example:
 What is openshift in 20 words or less?
 
 [source,sh,role=execute,subs=attributes+]
@@ -308,15 +308,23 @@ Parasol has a chatbot application infused with AI (the granite model) to provide
 [#using_parasol_application]
 === Using the Parasol Application
 
-Let's start by taking a look at the current experience a claims agent has when interacting with the chatbot. While you may currently be in the *Terminals* view, switch to *Parasol* to see the Parasol company's claims application in your browser.
+Let's start by taking a look at the current experience a claims agent has when interacting with the chatbot. 
+
+. While you may currently be in the *Terminals* view, switch to *Parasol* to see the Parasol company's claims application in your browser.
 
 image::parasol-view.png[]
 
-As a claims agent, you can navigate and view the existing claims by clicking on the claim number on the screen. For this lab we will be investigating *CLM195501* which is a claim that has been filed by Marty McFly, let's click on this claim now.
+As a claims agent, you can navigate and view the existing claims by clicking on the claim number on the screen. 
+
+[start=2]
+. For this lab we will be investigating *CLM195501* which is a claim that has been filed by Marty McFly, let's click on this claim now.
 
 image::parasol-claim.png[]
 
-You can read the details of the claim on this page and even expand the image of the DeLorean to check out how badly Marty wrecked his ride (note the flux capacitor on the ground). Once you read the claim you click on the chatbot using the small blue icon in the bottom right of the page.
+You can read the details of the claim on this page and even expand the image of the DeLorean to check out how badly Marty wrecked his ride (note the flux capacitor on the ground). 
+
+[start=3]
+. Once you read the claim you click on the chatbot using the small blue icon in the bottom right of the page.
 
 image::parasol-chat.webp[width=350]
 
@@ -327,7 +335,10 @@ IMPORTANT: This chatbot is backed by the InstructLab model you served earlier, s
 // ilab model chat -m models/granite-7b-lab-Q4_K_M.gguf
 // ----
 
-Let's imagine as a claims agent you'd like to know how much it might cost to repair a flux capacitor on Marty's DeLorean. Ask the chatbot the following question:
+Let's imagine as a claims agent you'd like to know how much it might cost to repair a flux capacitor on Marty's DeLorean. 
+
+[start=4]
+. Ask the chatbot the following question:
 
 [source,sh,role=execute,subs=attributes+]
 ----
@@ -376,6 +387,7 @@ taxonomy/
 
 Now, we need to create a directory where we can place our files.
 
+[start=2]
 . Create a directory to add new knowledge showing how to properly generate a knowledge on Instructlab 
 
 [source,sh,role=execute,subs=attributes+]
@@ -383,20 +395,23 @@ Now, we need to create a directory where we can place our files.
 mkdir -p ~/instructlab/taxonomy/knowledge/parasol/claims
 ----
 
+[start=3]
 . Add new capabilities to our model through new knowledge. 
 
 The way the taxonomy approach works is that we provide a file, named `qna.yaml`, that contains a sample data set of questions and answers. This data set will be used in the process of creating many more synthetic data examples, enough to fully influence the model's output. The important thing to understand about the `qna.yaml` file is that it must follow a specific schema for InstructLab to use it to synthetically generate more examples. 
 
 The `qna.yaml` file is placed in a folder within the `knowledge` subdirectory of the taxonomy directory. It is placed in a folder with an appropriate name that is aligned with the data topic, as you will see in the below command.
 
-Instead of having to type a bunch of information in by hand, simply run the following command to copy this example https://raw.githubusercontent.com/gshipley/backToTheFuture/main/qna.yaml[qna.yaml] file to your taxonomy directory:
+[start=4]
+. Instead of having to type a bunch of information in by hand, simply run the following command to copy this example https://raw.githubusercontent.com/gshipley/backToTheFuture/main/qna.yaml[`qna.yaml`] file to your taxonomy directory:
 
 [source,sh,role=execute,subs=attributes+]
 ----
 cp -av ~/files/qna.yaml ~/instructlab/taxonomy/knowledge/parasol/claims/
 ----
 
-You can then verify the file was correctly copied by issuing the following command which will display the first 10 lines of the file:
+[start=5]
+. You can then verify the file was correctly copied by issuing the following command which will display the first 10 lines of the file:
 
 [source,sh,role=execute,subs=attributes+]
 ----
@@ -436,6 +451,7 @@ document:
     - data.md
 ----
 
+[start=6]
 . Verification that the seed data is curated properly.
 
 InstructLab allows you to validate your taxonomy files before generating additional data. You can accomplish this by using the `ilab taxonomy diff` command as shown below:
@@ -459,7 +475,7 @@ Taxonomy in /taxonomy/ is valid :)
 
 Okay, so far so good. Now, let’s move on to the AWESOME part. We are going to use our taxonomy, which contains our `qna.yaml` file, to have the LLM automatically generate more examples. The generate step can often take a while and is dependent on the number of instructions that you want to generate. In other words, this means that InstructLab will generate X number of additional questions and answers based on the samples provided. To give you an idea of how long this takes, generating 100 additional questions and answers typically takes about 7 minutes when using a nicely specced consumer-grade GPU-accelerated Linux machine. This can take around 15 minutes using Apple Silicon and depends on many factors. For the purpose of this workshop, we are only going to generate 5 additional samples. To do this, issue the following commands:
 
-We will now run the command (in the second Terminal) to generate the synthetic data:
+. We will now run the command (in the second Terminal) to generate the synthetic data:
 
 [source,sh,role=execute,subs=attributes+]
 ----
@@ -522,7 +538,7 @@ LINUX_TRAIN.PY: LOADING THE BASE MODEL
 Loading checkpoint shards: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [00:00<00:00,  5.95it/s]
 ----
 
-Since this process will take over an hour to complete we have provided a model that has already been through this process. In order to serve the newly trained model you can run the following:
+. Since this process will take over an hour to complete we have provided a model that has already been through this process. In order to serve the newly trained model you can run the following:
 
 [source,sh,role=execute,subs=attributes+]
 ----
@@ -549,7 +565,7 @@ Click on the blue chatbot icon in the bottom right corner of the screen to open 
 
 image::parasol-chat.webp[width=350]
 
-Let’s ask the chatbot the same question with the newly trained model and see if the response has improved.
+. Let’s ask the chatbot the same question with the newly trained model and see if the response has improved.
 
 [source,sh,role=execute,subs=attributes+]
 ----
