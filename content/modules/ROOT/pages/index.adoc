@@ -7,14 +7,14 @@
 
 == Introduction to the Lab
 
-Thanks for taking time to learn about and use RHEL AI at Red Hat Summit Connect. During this hands-on exercise, you will learn what RHEL AI is and how you can use it to provide value to your company. You will also learn how to leverage RHEL AI to improve a Large Language Model (LLM), and train it using synthetic data generation.  RHEL AI consists of several core components:
+Thanks for taking the time to learn about and use RHEL AI at Red Hat Summit Connect. During this hands-on exercise, you will learn what https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux/ai[RHEL AI] is and how you can use it to provide value to your company. You will also learn how to leverage RHEL AI to improve a Large Language Model (LLM), and train it using synthetic data generation.  RHEL AI consists of several core components:
 
-. RHEL Image Mode
-. The Granite Large Language Model(s)
-. InstructLab for model alignment
-. Support and indemnification
+. https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux/image-mode[RHEL Image Mode]
+. The https://www.ibm.com/granite[Granite] Large Language Model(s)
+. https://www.redhat.com/en/topics/ai/what-is-instructlab[InstructLab] for model alignment
+. Support and indemnification from Red Hat
 
-InstructLab is a fully open-source project from Red Hat, and the MIT-IBM Watson AI Lab, that introduces https://arxiv.org/abs/2403.01081[Large-scale Alignment for chatBots] (LAB). The project's innovation helps during the instruction-tuning phase of LLM training. However, to fully understand the benefit of this project, you need to be familiar with some basic concepts of what an LLM is and the difficulty and cost associated with training a model.
+https://www.redhat.com/en/topics/ai/what-is-instructlab[InstructLab] is a fully open-source project from Red Hat, and the MIT-IBM Watson AI Lab, that introduces https://arxiv.org/abs/2403.01081[Large-scale Alignment for chatBots] (LAB). The project's innovation helps during the instruction-tuning phase of LLM training. However, to fully understand the benefit of this project, you need to be familiar with some basic concepts of what an LLM is and the difficulty and cost associated with training a model.
 
 [#llms]
 === What is a Large Language Model?
@@ -47,16 +47,16 @@ Large language models (LLMs) are typically trained using deep learning technique
 [#instructlab]
 === How does this relate to InstructLab?
 
-InstructLab leverages a taxonomy-guided synthetic data generation process and a multi-phase tuning framework. This allows InstructLab to significantly reduce reliance on expensive human annotations, making contributing to a large language model easy and accessible. This means that InstructLab can generate data using the LLM to further train the LLM. It also means that the alignment phase becomes most user’s starting point for contributing their knowledge.  Prior to the LAB technique, users typically had no direct involvement in training an LLM. I know this may sound complicated, but hang in there. You will see how easy this is to use.
+InstructLab leverages a taxonomy-guided synthetic data generation process and a multi-phase tuning framework. This allows InstructLab to significantly reduce reliance on expensive human annotations, making contributing to a large language model easy and accessible. This means that InstructLab can use the LLM to generate data, which is then used to further train the LLM. It also means that the alignment phase becomes most user’s starting point for contributing their knowledge.  Prior to the LAB technique, users typically had no direct involvement in training an LLM. I know this may sound complicated, but hang in there. You will see how easy this is to use.
 
-As you work with InstructLab, you will see the terms Skills and Knowledge.  What is the difference between Skills and Knowledge? A simple analogy is to think of a skill as teaching someone how to fish. Knowledge, on the other hand, is knowing that the best place to catch a Bass is when the sun is setting while casting your line near the trunk of a tree along the bank.
+As you work with InstructLab, you will see the terms Skills and Knowledge. What is the difference between Skills and Knowledge? A simple analogy is to think of a skill as teaching someone how to fish. Knowledge, on the other hand, is knowing that the best place to catch a Bass is when the sun is setting while casting your line near the trunk of a tree along the bank.
 
 [#getting_started]
 == Getting started with InstructLab
 
 === Install the ilab command line interface
 
-We created a CLI tool called ilab that implements a local LLM developer experience and workflow. The ilab CLI is written in Python and works on the following architectures:
+We created a CLI tool called https://github.com/instructlab/instructlab[ilab] that implements a local LLM developer experience and workflow. The ilab CLI is written in Python and works on the following architectures:
 
 . Apple M1/M2/M3 Mac
 . Linux systems
@@ -153,10 +153,7 @@ Commands:
 [#initialize]
 === Initialize ilab
 
-Now that we know that the command-line interface `ilab` is working correctly, the next thing we need to do is initialize the local environment so that we can begin working with the model. This is accomplished by issuing a simple init command.
-
-
-Step 1: Initialize ilab by running the following command:
+Now that we know that the command-line interface `ilab` is working correctly, the next thing we need to do is initialize the local environment so that we can begin working with the model. This is accomplished by issuing a simple init command. Initialize ilab by running the following command:
 
 [source,sh,role=execute,subs=attributes+]
 ----
@@ -208,14 +205,16 @@ Initialization completed successfully, you're ready to start using `ilab`. Enjoy
 [#download]
 === Download the model
 
-*Step 1*: Run the `ilab download` command.
+With the InstructLab environment configured, you can now download a quantized (compressed and optimized) model to your local directory, to be used as a model server for API requests, or to help train a new model as we'll do in this workshop.
+
+. Run the `ilab model download` command.
 
 [source,sh,role=execute,subs=attributes+]
 ----
 ilab model download --repository instructlab/granite-7b-lab-GGUF --filename=granite-7b-lab-Q4_K_M.gguf
 ----
 
-The ilab download command downloads a model from the HuggingFace instructlab organization that we will use for this workshop. The output should look like the following:
+The `ilab model download` command downloads a model from the HuggingFace instructlab organization that we will use for this workshop. The output should look like the following:
 
 // NOTE: *This command may not show the contents if the model is being cached on the local machine.*
 
@@ -321,12 +320,12 @@ You can read the details of the claim on this page and even expand the image of 
 
 image::parasol-chat.webp[width=350]
 
-This chatbot is backed by the InstructLab model you served earlier, so if you killed that running process you will need to restart it in your terminal by running the following:
+IMPORTANT: This chatbot is backed by the InstructLab model you served earlier, so if you killed that running process you will need to restart it in your terminal by running the following: `ilab model chat -m models/granite-7b-lab-Q4_K_M.gguf``
 
-[source,sh,role=execute,subs=attributes+]
-----
-ilab model chat -m models/granite-7b-lab-Q4_K_M.gguf
-----
+// [source,sh,role=execute,subs=attributes+]
+// ----
+// ilab model chat -m models/granite-7b-lab-Q4_K_M.gguf
+// ----
 
 Let's imagine as a claims agent you'd like to know how much it might cost to repair a flux capacitor on Marty's DeLorean. Ask the chatbot the following question:
 
@@ -339,22 +338,20 @@ You should see something similar to the following. Note that LLMs by nature are 
 
 image::parasol-chat-response.webp[width=350]
 
-What we've already started to do is provide contextual information about the claim in each conversation with the LLM using Prompt Engineering. But unfortunately, the chatbot doesn't know how much it costs to repair a flux capacitor. With InstructLab and RHEL-AI, we can change that by teaching the model!
+What we've already started to do is provide contextual information about the claim in each conversation with the LLM using Prompt Engineering. But unfortunately, the chatbot doesn't know how much it costs to repair a flux capacitor, or any domain-specific knowledge for our organization. With InstructLab and RHEL-AI, we can change that by teaching the model!
 
 [#taxononmy]
 === Understanding the Taxonomy
 
-InstructLab uses a novel synthetic data-based alignment tuning method for Large Language Models (LLMs.) The "lab" in InstructLab stands for **L**arge-scale **A**lignment for Chat **B**ots.
-
-The LAB method is driven by taxonomies, which are largely created manually and with care.
+InstructLab uses a novel synthetic data-based alignment tuning method for Large Language Models (LLMs.) The "lab" in InstructLab stands for **L**arge-scale **A**lignment for Chat **B**ots. The LAB method is driven by taxonomies, which are largely created manually and with care.
 
 InstructLab crowdsources the process of tuning and improving models by collecting two types of data: knowledge and skills in a new open source community. These submissions are collected in a taxonomy of YAML files to be used in the synthetic data generation process. To help you understand the directory structure of a taxonomy, please refer to the following image.
 
 image::taxonomy.png[]
 
-We are now going to leverage the taxonomy model to teach the model the knowledge on the Instructlab project
+We are now going to leverage the taxonomy model to teach the model knowledge about a specific vehicle we cover and its details, from our organization's collection of public (and private) internal data.
 
-*Step 1*: Verify you have the taxonomy directory in the working directory you are in.
+. Verify you have the taxonomy directory in the working directory you are in.
 
 [source,sh,role=execute,subs=attributes+]
 ----
@@ -379,20 +376,20 @@ taxonomy/
 
 Now, we need to create a directory where we can place our files.
 
-*Step 2*: Create a directory to add new knowledge showing how to properly generate a knowledge on Instructlab 
+. Create a directory to add new knowledge showing how to properly generate a knowledge on Instructlab 
 
 [source,sh,role=execute,subs=attributes+]
 ----
 mkdir -p ~/instructlab/taxonomy/knowledge/parasol/claims
 ----
 
-*Step 3*: Add new knowledge.
+. Add new capabilities to our model through new knowledge. 
 
-The way the taxonomy approach works is that we provide a file, named qna.yaml, that contains a sample data set of questions and answers. This data set will be used in the process of creating many more synthetic data examples.  The important thing to understand about the qna.yaml file is that it must follow a specific schema for InstructLab to use it to synthetically generate more examples. 
+The way the taxonomy approach works is that we provide a file, named `qna.yaml`, that contains a sample data set of questions and answers. This data set will be used in the process of creating many more synthetic data examples, enough to fully influence the model's output. The important thing to understand about the `qna.yaml` file is that it must follow a specific schema for InstructLab to use it to synthetically generate more examples. 
 
-The qna.yaml file is placed in a folder within the 'knowledge' subdirectory of the taxonomy directory. It is placed in a folder with an appropriate name that is aligned with the data topic, as you will see in the below command.
+The `qna.yaml` file is placed in a folder within the `knowledge` subdirectory of the taxonomy directory. It is placed in a folder with an appropriate name that is aligned with the data topic, as you will see in the below command.
 
-Instead of having to type a bunch of information in by hand, simply run the following command to copy the https://raw.githubusercontent.com/gshipley/backToTheFuture/main/qna.yaml[qna.yaml] file to your taxonomy directory:
+Instead of having to type a bunch of information in by hand, simply run the following command to copy this example https://raw.githubusercontent.com/gshipley/backToTheFuture/main/qna.yaml[qna.yaml] file to your taxonomy directory:
 
 [source,sh,role=execute,subs=attributes+]
 ----
@@ -439,9 +436,9 @@ document:
     - data.md
 ----
 
-*Step 4*: Verification
+. Verification that the seed data is curated properly.
 
-InstructLab allows you to validate your taxonomy files before generating additional data. You can accomplish this by using the ilab diff command as shown below:
+InstructLab allows you to validate your taxonomy files before generating additional data. You can accomplish this by using the `ilab taxonomy diff` command as shown below:
 
 NOTE: Make sure you are still in the virtual environment indicated by the (venv) on the command line. If not, source the venv/bin/activate file again.
 
@@ -458,16 +455,16 @@ Taxonomy in /taxonomy/ is valid :)
 ----
 
 [#synthetic_data]
-=== Generating Synthetic data
+=== Generating Synthetic Data
 
-Okay, so far so good. Now, let’s move on to the AWESOME part. We are going to use our taxonomy, which contains our qna.yaml file, to have the LLM automatically generate more examples. The generate step can often take a while and is dependent on the number of instructions that you want to generate. In other words, this means that InstructLab will generate X number of additional questions and answers based on the samples provided. To give you an idea of how long this takes, generating 100 additional questions and answers typically takes about 7 minutes when using a nicely specced consumer-grade GPU-accelerated Linux machine. This can take around 15 minutes using Apple Silicon and depends on many factors. For the purpose of this workshop, we are only going to generate 5 additional samples. To do this, issue the following commands:
+Okay, so far so good. Now, let’s move on to the AWESOME part. We are going to use our taxonomy, which contains our `qna.yaml` file, to have the LLM automatically generate more examples. The generate step can often take a while and is dependent on the number of instructions that you want to generate. In other words, this means that InstructLab will generate X number of additional questions and answers based on the samples provided. To give you an idea of how long this takes, generating 100 additional questions and answers typically takes about 7 minutes when using a nicely specced consumer-grade GPU-accelerated Linux machine. This can take around 15 minutes using Apple Silicon and depends on many factors. For the purpose of this workshop, we are only going to generate 5 additional samples. To do this, issue the following commands:
 
 We will now run the command (in the second Terminal) to generate the synthetic data:
 
 [source,sh,role=execute,subs=attributes+]
 ----
 cd ~/instructlab
-ilab data generate --model models/granite-7b-lab-Q4_K_M.gguf --num-instructions 10
+ilab data generate --model models/granite-7b-lab-Q4_K_M.gguf --num-instructions 5
 ----
 
 After running this command, you should see the InstructLab is now synthetically generating 5 examples based on the seed data you provided in the qna.yaml file. Take a look at the generated questions and answers to see what the model has created!
@@ -541,7 +538,6 @@ INFO 2024-08-06 17:04:15,452 server.py:218: server Starting server process, pres
 INFO 2024-08-06 17:04:15,452 server.py:219: server After application startup complete see http://127.0.0.1:8000/docs for API.
 ----
 
-
 [#verify]
 === Verifying the Application
 
@@ -569,12 +565,10 @@ CONGRATULATIONS! You just trained a chatbot for Parasol insurance and will make 
 [#conclusion]
 == Conclusion
 
-Woohoo young padawan, mission accomplished. Breathe in for a bit. We’re proud of you, and I dare say you’re an AI Engineer now. You’re probably wondering what the next steps are, and frankly, your guess is as good as mine, but let me give you some suggestions.
+Woohoo young padawan, mission accomplished. Breathe in for a bit. We’re proud of you, and I dare say you’re an AI Engineer now. You’re probably wondering what the next steps are, so let me give you some suggestions.
 
 Start playing with both skill and knowledge additions. This is to give something "new" to the model. You give it a chunk of data, something it doesn’t know about, and then train it on that. How could InstructLab-trained models help at your company? Which friend will you brag to first?
 
-As you can see, InstructLab is pretty straightforward and most of the time you spend will be on curating new taxonomy content.
+As you can see, InstructLab is pretty straightforward and most of the time you spend will be on curating new taxonomy content. Again, we’re so happy you made it this far, and remember if you have questions we are here to help, and are excited to see what you come up with!
 
-Again, we’re so happy you made it this far, and remember if you have questions we are here to help, and are excited to see what you come up with!
-
-Please visit the official project github at link:https://github.com/instructlab[https://github.com/instructlab] and check out the community repo to learn about how to get involved with the upstream community!
+Please visit the official project github at https://github.com/instructlab[www.github.com/instructlab] and check out the community repo to learn about how to get involved with the upstream community! Also, https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux/ai[learn more about RHEL AI here] (which includes support for InstructLab, idemification for model output with the Granite family of models, and a platform to run AI your own way on the hybrid cloud).
