@@ -257,7 +257,7 @@ Because you’re serving the model in one terminal window, you will have to crea
 
 // Note: You can open a new tab in your terminal by hitting the command-t keyboard combination. If you need assistance, please ask a Red Hatter in the InstructLab Lounge.
 
-In the other terminal window, Issue the following commands:
+In the bottom terminal window, Issue the following commands:
 
 [source,sh,role=execute,subs=attributes+]
 ----
@@ -309,11 +309,11 @@ Parasol has a chatbot application infused with AI (the granite model) to provide
 [#using_parasol_application]
 === Using the Parasol Application
 
-Let's start by taking a look at the current experience a claims agent has when interacting with the chatbot. While you may currently be in the _Terminals_ view, switch to _Parasol_ to see the Parasol company's claims application in your browser.
+Let's start by taking a look at the current experience a claims agent has when interacting with the chatbot. While you may currently be in the *Terminals* view, switch to *Parasol* to see the Parasol company's claims application in your browser.
 
 image::parasol-view.png[]
 
-As a claims agent, you can navigate and view the existing claims by clicking on the claim number on the screen. For this lab we will be investigating CLM195501 which is a claim that has been filed by Marty McFly. Click on CLM195501 to open the claim.
+As a claims agent, you can navigate and view the existing claims by clicking on the claim number on the screen. For this lab we will be investigating *CLM195501* which is a claim that has been filed by Marty McFly, let's click on this claim now.
 
 image::parasol-claim.png[]
 
@@ -529,7 +529,7 @@ Since this process will take over an hour to complete we have provided a model t
 
 [source,sh,role=execute,subs=attributes+]
 ----
-ilab model serve --model-family merlinite --model-path models/summit-connect-merlinite-7b-lab-Q4_K_M.gguf
+ilab model serve --model-family merlinite --model-path /home/instruct/summit-connect-merlinite-lab-Q4.gguf
 ----
 
 It may take some seconds to start, but you should see the following:
