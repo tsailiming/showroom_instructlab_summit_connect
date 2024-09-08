@@ -205,9 +205,7 @@ Initialization completed successfully, you're ready to start using `ilab`. Enjoy
 [#download]
 === Download the model
 
-With the InstructLab environment configured, you can now download a quantized (compressed and optimized) model to your local directory, to be used as a model server for API requests, or to help train a new model as we'll do in this workshop.
-
-. Run the `ilab model download` command.
+With the InstructLab environment configured, you can now download a quantized (compressed and optimized) model to your local directory, to be used as a model server for API requests, or to help train a new model as we'll do in this workshop. Run the `ilab model download` command.
 
 [source,sh,role=execute,subs=attributes+]
 ----
