@@ -236,17 +236,36 @@ Let's serve the model by running the following command:
 
 [source,sh,role=execute,subs=attributes+]
 ----
-ilab model serve --model-path models/granite-7b-lab-Q4_K_M.gguf
+ilab model serve --model-path /home/instruct/.cache/instructlab/models/granite-7b-lab-Q4_K_M.gguf
 ----
 
 As you can see, the serve command can take an optional `-–model-path` argument. In this case, we want to serve the Granite model. If no model path is provided, the default value from the config.yaml file will be used. 
+
 Once the model is served and ready, you’ll see the following output:
 
 [subs=quotes]
 ----
-INFO 2024-04-23 17:16:53,903 lab.py:296 Using model '/models/granite-7b-lab-Q4_K_M.gguf' with -1 gpu-layers and 4096 max context size.
-INFO 2024-04-23 17:17:02,861 server.py:155 Starting server process, press CTRL+C to shutdown server...
-INFO 2024-04-23 17:17:02,861 server.py:156 After application startup complete see http://127.0.0.1:8000/docs for API.
+INFO 2024-09-10 18:12:09,459 instructlab.model.serve:145: Using model '/home/instruct/.cache/instructlab/models/granite-7b-lab-Q4_K_M.gguf' with -1 gpu-layers and 4096 max context size.
+INFO 2024-09-10 18:12:09,459 instructlab.model.serve:149: Serving model '/home/instruct/.cache/instructlab/models/granite-7b-lab-Q4_K_M.gguf' with llama-cpp
+INFO 2024-09-10 18:12:16,023 instructlab.model.backends.llama_cpp:250: Replacing chat template:
+ {% for message in messages %}
+{% if message['role'] == 'user' %}
+{{ '<|user|>
+' + message['content'] }}
+{% elif message['role'] == 'system' %}
+{{ '<|system|>
+' + message['content'] }}
+{% elif message['role'] == 'assistant' %}
+{{ '<|assistant|>
+' + message['content'] + eos_token }}
+{% endif %}
+{% if loop.last and add_generation_prompt %}
+{{ '<|assistant|>' }}
+{% endif %}
+{% endfor %}
+INFO 2024-09-10 18:12:16,026 instructlab.model.backends.llama_cpp:193: Starting server process, press CTRL+C to shutdown server...
+INFO 2024-09-10 18:12:16,026 instructlab.model.backends.llama_cpp:194: After application startup complete see http://127.0.0.1:8000/docs for API.
+
 ----
 
 *WOOHOO!* You just served the model for the first time and are ready to test out your work so far by interacting with the LLM. We are going to accomplish this by chatting with the model.
@@ -254,9 +273,7 @@ INFO 2024-04-23 17:17:02,861 server.py:156 After application startup complete se
 [#chat]
 === Chat with the model
 
-Because you’re serving the model in one terminal window, you will have to create a new window and re-activate your Python virtual environment to run the ilab chat command. 
-
-// Note: You can open a new tab in your terminal by hitting the command-t keyboard combination. If you need assistance, please ask a Red Hatter in the InstructLab Lounge.
+Because you’re serving the model in one terminal window, you will have to use a separate terminal window and re-activate your Python virtual environment to run the ilab chat command. 
 
 . In the bottom terminal window, issue the following commands:
 
@@ -276,7 +293,7 @@ source venv/bin/activate
 
 [source,sh,role=execute,subs=attributes+]
 ----
-ilab model chat -m models/granite-7b-lab-Q4_K_M.gguf
+ilab model chat -m /home/instruct/.cache/instructlab/models/granite-7b-lab-Q4_K_M.gguf
 ----
 
 You should see a chat prompt like the example below.
@@ -284,7 +301,7 @@ You should see a chat prompt like the example below.
 [source,sh]
 ----
 ╭───────────────────────────────────────────────────────────────────────────╮
-│ Welcome to Chat CLI w/ MODELS/GRANITE-7B-LAB-Q4_K_M.GGUF (type /h for help)                                                                                                                            
+│ Welcome to InstructLab Chat w/ GRANITE-7B-LAB-Q4_K_M.GGUF (type /h for help)                                                                                                                            
 ╰───────────────────────────────────────────────────────────────────────────╯
 >>> 
 ----
@@ -303,9 +320,9 @@ Wait, wut? That was AWESOME!!!!! You now have your own local LLM running on this
 [#integrating_instructlab]
 == Integrating AI into an Insurance Application
 
-The previous section showed you the basics of how to interact with InstructLab. Now let's take things a step further by using InstructLab with an example application. We will use RHEL AI to leverage the granite LLM, add additional data in the form of knowledge and/or skills, train the model with new knowledge and enable it to answer questions effectively. This is done in the context of Parasol, a fictional company that processes insurance claims.
+The previous section showed you the basics of how to interact with InstructLab. Now let's take things a step further by using InstructLab with an example application. We will use RHEL AI to leverage the Granite LLM, add additional data in the form of knowledge and/or skills, train the model with new knowledge and enable it to answer questions effectively. This is done in the context of Parasol, a fictional company that processes insurance claims.
 
-Parasol has a chatbot application infused with AI (the granite model) to provide repair suggestions for claims submitted. This would allow Parasol to expedite processing of various claims on hold. But at the moment, the chatbot does not provide effective repair suggestions. Using historical claims data that contain different repairs performed under different conditions, we show how users can add this knowledge to the granite model, train it on the additional knowledge and improve its recommendations.
+Parasol has a chatbot application infused with AI (the Granite model) to provide repair suggestions for claims submitted. This would allow Parasol to expedite processing of various claims on hold. But at the moment, the chatbot does not provide effective repair suggestions. Using historical claims data that contain different repairs performed under different conditions, we show how users can add this knowledge to the Granite model, train it on the additional knowledge and improve its recommendations.
 
 [#using_parasol_application]
 === Using the Parasol Application
@@ -330,12 +347,7 @@ You can read the details of the claim on this page and even expand the image of 
 
 image::parasol-chat.webp[width=350]
 
-IMPORTANT: This chatbot is backed by the InstructLab model you served earlier, so if you killed that running process you will need to restart it in your terminal by running the following: `ilab model chat -m models/granite-7b-lab-Q4_K_M.gguf``
-
-// [source,sh,role=execute,subs=attributes+]
-// ----
-// ilab model chat -m models/granite-7b-lab-Q4_K_M.gguf
-// ----
+IMPORTANT: This chatbot is backed by the InstructLab model you served earlier, so if you killed that running process you will need to restart it in your terminal by running the following: `ilab model chat -m /home/instruct/.cache/instructlab/models/granite-7b-lab-Q4_K_M.gguf`
 
 Let's imagine as a claims agent you'd like to know how much it might cost to repair a flux capacitor on Marty's DeLorean. 
 
@@ -347,44 +359,46 @@ Let's imagine as a claims agent you'd like to know how much it might cost to rep
 How much does it cost to repair a flux capacitor?
 ----
 
-You should see something similar to the following. Note that LLMs by nature are non-deterministic, so your results may vary slightly.
+You should see something similar to the following. Note that LLMs by nature are non-deterministic. This means that even with the same prompt input, the model will produce varying responses. So, your results may vary slightly.
 
 image::parasol-chat-response.webp[width=350]
 
-What we've already started to do is provide contextual information about the claim in each conversation with the LLM using Prompt Engineering. But unfortunately, the chatbot doesn't know how much it costs to repair a flux capacitor, or any domain-specific knowledge for our organization. With InstructLab and RHEL-AI, we can change that by teaching the model!
+What we've already started to do is provide contextual information about the claim in each conversation with the LLM using Prompt Engineering. But unfortunately, the chatbot doesn't know how much it costs to repair a flux capacitor, or any domain-specific knowledge for our organization. With InstructLab and RHEL AI, we can change that by teaching the model!
 
 [#taxononmy]
 === Understanding the Taxonomy
 
 InstructLab uses a novel synthetic data-based alignment tuning method for Large Language Models (LLMs.) The "lab" in InstructLab stands for **L**arge-scale **A**lignment for Chat **B**ots. The LAB method is driven by taxonomies, which are largely created manually and with care.
 
-InstructLab crowdsources the process of tuning and improving models by collecting two types of data: knowledge and skills in a new open source community. These submissions are collected in a taxonomy of YAML files to be used in the synthetic data generation process. To help you understand the directory structure of a taxonomy, please refer to the following image.
+InstructLab crowdsources the process of tuning and improving models by collecting two types of data: knowledge and skills in the new InstructLab open source community. These submissions are collected in a taxonomy of YAML files to be used in the synthetic data generation process. To help you understand the directory structure of a taxonomy, please refer to the following image.
 
 image::taxonomy.png[]
 
 We are now going to leverage the taxonomy model to teach the model knowledge about a specific vehicle we cover and its details, from our organization's collection of public (and private) internal data.
 
-. Verify you have the taxonomy directory in the working directory you are in.
+Navigate back to the *Terminals* view. In the terminal window where you are running chat, enter `exit` to quit the chat session.
+
+. Navigate to the taxonomy directory.
 
 [source,sh,role=execute,subs=attributes+]
 ----
-cd ~/instructlab
+cd /home/instruct/.local/share/instructlab
 tree taxonomy | head -n 10
 ----
 
 .You should see the taxonomy directory listed as shown below:
 [source,texinfo]
 ----
-taxonomy/
+taxonomy
 ├── CODE_OF_CONDUCT.md
 ├── compositional_skills
-│   ├── arts
-│   ├── engineering
-│   ├── geography
-│   ├── grounded
-│   │   ├── arts
-│   │   ├── engineering
-│   │   ├── geography
+│   ├── arts
+│   ├── engineering
+│   ├── general
+│   │   └── synonyms
+│   │       ├── attribution.txt
+│   │       └── qna.yaml
+│   ├── geography
 ----
 
 Now, we need to create a directory where we can place our files.
@@ -394,7 +408,7 @@ Now, we need to create a directory where we can place our files.
 
 [source,sh,role=execute,subs=attributes+]
 ----
-mkdir -p ~/instructlab/taxonomy/knowledge/parasol/claims
+mkdir -p /home/instruct/.local/share/instructlab/taxonomy/knowledge/parasol/claims
 ----
 
 [start=3]
@@ -405,11 +419,11 @@ The way the taxonomy approach works is that we provide a file, named `qna.yaml`,
 The `qna.yaml` file is placed in a folder within the `knowledge` subdirectory of the taxonomy directory. It is placed in a folder with an appropriate name that is aligned with the data topic, as you will see in the below command.
 
 [start=4]
-. Instead of having to type a bunch of information in by hand, simply run the following command to copy this example https://raw.githubusercontent.com/gshipley/backToTheFuture/main/qna.yaml[`qna.yaml`] file to your taxonomy directory:
+. Instead of having to type a bunch of information in by hand, simply run the following command to copy this example https://raw.githubusercontent.com/rhai-code/backToTheFuture/main/qna.yaml[`qna.yaml`] file to your taxonomy directory:
 
 [source,sh,role=execute,subs=attributes+]
 ----
-cp -av ~/files/qna.yaml ~/instructlab/taxonomy/knowledge/parasol/claims/
+cp -av ~/files/qna.yaml /home/instruct/.local/share/instructlab/taxonomy/knowledge/parasol/claims/
 ----
 
 [start=5]
@@ -417,35 +431,45 @@ cp -av ~/files/qna.yaml ~/instructlab/taxonomy/knowledge/parasol/claims/
 
 [source,sh,role=execute,subs=attributes+]
 ----
-head ~/instructlab/taxonomy/knowledge/parasol/claims/qna.yaml
+head /home/instruct/.local/share/instructlab/taxonomy/knowledge/parasol/claims/qna.yaml
 ----
 
 During this workshop, we don’t expect you to type all of this information in by hand - we are including the content here for your reference.
 
-It's a YAML file that consists of a list of Q&A examples that will be used by the trainer model to teach the student model. There is also a source document which is a link to a specific commit of a text file in git, where https://github.com/gshipley/backToTheFuture/blob/main/data.md[we've included] that a flux capacitor costs an affordable $10,000,000.
+It's a YAML file that consists of a list of Q&A examples that will be used by the trainer model to teach the student model. There is also a source document which is a link to a specific commit of a text file in git, where https://github.com/rhai-code/backToTheFuture/blob/main/data.md[we've included] that a flux capacitor costs an affordable $10,000,000. 
+
+To help you understand the qna file format, we have included an excerpt of the file below. Feel free to view the entire file on the system with the following command:
+
+[source,sh,role=execute,subs=attributes+]
+----
+cat /home/instruct/.local/share/instructlab/taxonomy/knowledge/parasol/claims/qna.yaml
+----
 
 [source,yaml]
 ----
-created_by: Marty_McFly
-domain: parasol
+version: 3
+domain: time_travel
+created_by: Marty McFly
 seed_examples:
-- answer: The DeLorean was manufactured from 1981 to 1983.
-  question: When was the DeLorean manufactured?
-- answer: The DeLorean Motor Company manufactured the DeLorean DMC-12.
-  question: Who manufactured the DeLorean DMC-12?
-- answer: Transmission Repair costs between $2,500 and $4,000 for the Delorean DMC-12.
-  question: How much does it cost to repair the transmission on a DeLorean DMC-12?
-- answer: The top speed of the DeLorean DMC-12 was 110MPH and the 0-60 time was approximately 8.8 seconds.
-  question: How fast was the Delorean DMC-12?
-- answer: The DeLorean DMC-12 weighs 2,712lb (1,230kg).
-  question: How much does the DeLorean DMC-12 weigh?
-- answer: Maintenance on a DeLorean DMC-12 includes regular oil changes every 3,000 miles or 3 months,
-    brake fluid change every 2 years, transmission fluid changes every 30,000 miles, coolant change every 2 years,
-    and regularly checking the battery for corrosion and proper connection.
-  question: What does maintenance for a DeLorean DMC12 look like?
-- answer: It costs between $800 and $1000 to repair the suspension on a DeLorean DMC-12.
-  question: How much does it cost to repair the supension on a DeLorean DMC-12?
-task_description: 'Details on instructlab community project'
+  - context: |
+      The DeLorean DMC-12 is a sports car manufactured by John DeLorean's DeLorean Motor Company
+      for the American market from 1981 to 1983. The car features gull-wing doors and a stainless-steel body.
+      It gained fame for its appearance as the time machine in the "Back to the Future" film trilogy.
+    questions_and_answers:
+      - question: |
+          When was the DeLorean manufactured?
+        answer: |
+          The DeLorean was manufactured from 1981 to 1983.
+      - question: |
+          Who manufactured the DeLorean DMC-12?
+        answer: |
+          The DeLorean Motor Company manufactured the DeLorean DMC-12.
+      - question: |
+          What type of doors does the DeLorean DMC-12 have?
+        answer: |
+          Gull-wing doors.
+document_outline: |
+  Details and repair costs on a DeLorean DMC-12 car.
 document:
   repo: https://github.com/gshipley/backToTheFuture.git
   commit: 8bd9220c616afe24b9673d94ec1adce85320809c
@@ -469,7 +493,7 @@ ilab taxonomy diff
 [source,sh]
 ----
 knowledge/parasol/claims/qna.yaml
-Taxonomy in /taxonomy/ is valid :)
+Taxonomy in /home/instruct/.local/share/instructlab/taxonomy is valid :)
 ----
 
 [#synthetic_data]
@@ -477,34 +501,42 @@ Taxonomy in /taxonomy/ is valid :)
 
 Okay, so far so good. Now, let’s move on to the AWESOME part. We are going to use our taxonomy, which contains our `qna.yaml` file, to have the LLM automatically generate more examples. The generate step can often take a while and is dependent on the number of instructions that you want to generate. In other words, this means that InstructLab will generate X number of additional questions and answers based on the samples provided. To give you an idea of how long this takes, generating 100 additional questions and answers typically takes about 7 minutes when using a nicely specced consumer-grade GPU-accelerated Linux machine. This can take around 15 minutes using Apple Silicon and depends on many factors. For the purpose of this workshop, we are only going to generate 5 additional samples. To do this, issue the following commands:
 
-. We will now run the command (in the second Terminal) to generate the synthetic data:
+. We will now run the command to generate data in the current terminal. The other terminal should still be serving the Granite model from earlier. If the model is no longer being served, serve the model again with the following command (in the other terminal window):
 
 [source,sh,role=execute,subs=attributes+]
 ----
-cd ~/instructlab
-ilab data generate --model models/granite-7b-lab-Q4_K_M.gguf --num-instructions 5
+ilab model serve --model-path /home/instruct/.cache/instructlab/models/granite-7b-lab-Q4_K_M.gguf
 ----
 
-After running this command, you should see the InstructLab is now synthetically generating 5 examples based on the seed data you provided in the qna.yaml file. Take a look at the generated questions and answers to see what the model has created!
+Now run the following command in the terminal window that is not serving the model:
+
+[source,sh,role=execute,subs=attributes+]
+----
+ilab data generate --model /home/instruct/.cache/instructlab/models/granite-7b-lab-Q4_K_M.gguf --sdg-scale-factor 5 --gpus 1
+----
+
+After running this command, you should see InstructLab is now synthetically generating examples based on the seed data you provided in the qna.yaml file. You will see output on your screen indicating the data is being generated as shown below:
 
 [source,sh]
 ----
-Generating synthetic data using 'models/granite-7b-lab-Q4_K_M.gguf' model, taxonomy:'taxonomy' against http://127.0.0.1:8000/v1 server
-Cannot find prompt.txt. Using default prompt depending on model-family.
-  0%|                                                                                                                                       | 0/5 [00:00<?, ?it/s]Synthesizing new instructions. If you aren't satisfied with the generated instructions, interrupt training (Ctrl-C) and try adjusting your YAML files. Adding more examples may help.
-INFO 2024-08-06 16:38:53,754 generate_data.py:505: generate_data Selected taxonomy path knowledge->parasol->claims
-Q> What is the horsepower of the DeLorean DMC-12?
-I> 
-A> The DeLorean DMC-12 has a horsepower of 130 hp.
+INFO 2024-09-10 20:00:59,404 numexpr.utils:148: Note: NumExpr detected 48 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
+INFO 2024-09-10 20:00:59,404 numexpr.utils:161: NumExpr defaulting to 16 threads.
+INFO 2024-09-10 20:00:59,675 datasets:59: PyTorch version 2.3.1 available.
+INFO 2024-09-10 20:01:00,546 instructlab.model.backends.llama_cpp:104: Trying to connect to model server at http://127.0.0.1:8000/v1
+WARNING 2024-09-10 20:01:00,555 instructlab.data.generate:291: Disabling SDG batching - unsupported with llama.cpp serving
+Generating synthetic data using 'simple' pipeline, '/home/instruct/.cache/instructlab/models/granite-7b-lab-Q4_K_M.gguf' model, '/home/instruct/.local/share/instructlab/taxonomy' taxonomy, against http://127.0.0.1:8000/v1 server
+INFO 2024-09-10 20:01:00,870 instructlab.sdg:375: Synthesizing new instructions. If you aren't satisfied with the generated instructions, interrupt training (Ctrl-C) and try adjusting your YAML files. Adding more examples may help.
 ----
 
 Now that we have generated additional data, we can use the ilab train command to incorporate this data set with the model.
 
-NOTE: Generating 5 additional examples is generally not enough to effectively impact the knowledge or skill of a model. However, due to time constraints of this workshop, the goal is to simply show you how this works using real commands. You would typically want to generate 100 or even 1000 additional data points. Even still, training on a laptop is more of a technology demonstration than something you'd want to do to train production LLMs. For training production LLMs, Red Hat provides RHEL AI and OpenShift AI.
+If you would like to view the data generated, the SDG process creates a jsonl file located in the `/home/instruct/.local/share/instructlab/datasets` directory named knowledge_train_msgs[TIMESTAMP].jsonl
 
-Once the new data has been generated, the next step is to train the model with the updated skill. This is performed with the ilab train command.
+NOTE: Using a scale factor of 5 is generally not enough synthetic data to effectively impact the knowledge or skill of a model. However, due to time constraints of this workshop, the goal is to simply show you how this works using real commands. You would typically want to use a scale factor of 30 which is the default value to train the model effectively.
 
-NOTE: Training using the newly generated data is a time and resource intensive task. Depending on the number of iterations desired, internet connection for safetensor downloading, and other factors, it can take from 20 minutes up to an hour. It is not required to train the model to continue with the lab as we will use an already trained model that was created using a generate step with 2500 instructions and 300 iterations.
+Once the new data has been generated, the next step is to train the model with the updated knowledge. This is performed with the ilab train command.
+
+NOTE: Training using the newly generated data is a time and resource intensive task. Depending on the number of epochs desired, internet connection for safetensor downloading, and other factors, it can take from 20 minutes up to an hour and is highly dependent on the hardware used. It is not required to train the model to continue with the lab as we will use an already trained model.
 
 [#training]
 === Training and Interacting with the Model
@@ -513,7 +545,7 @@ Due to the time constraints of this lab, we will not actually be training the mo
 
 [source,sh,subs=attributes+]
 ----
-ilab model train --iters 10 --device cuda
+ilab model train --device cuda
 ----
 
 If we were really training the model, you would see the following output: 
