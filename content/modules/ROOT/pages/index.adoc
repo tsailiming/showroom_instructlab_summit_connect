@@ -62,7 +62,7 @@ We created a CLI tool called https://github.com/instructlab/instructlab[ilab] th
 . Linux systems
 . Windows 11 under a WSL environment
 
-During this lab, we will be using the ilab command line tools on a Red Hat Enterprise Linux system. We anticipate support for more operating systems in the future. The system requirements to use the command line tool are as follows:
+During this lab, we will be using the ilab command line tools on a Red Hat Enterprise Linux system. During this lab, we will be using the ilab command line tools on a Red Hat Enterprise Linux system. We anticipate support for more operating systems in the future. The system requirements to use the command line tool are as follows:
 
 . C++ compiler
 . Python 3.10+
@@ -91,17 +91,17 @@ source venv/bin/activate
 ----
 +
 
-// . Install the command line tool using the pip command
-// +
+. Install the command line tool using the pip command
++
 
-// [source,sh,role=execute,subs=attributes+]
-// ----
-// pip3 install git+https://github.com/instructlab/instructlab.git@v0.18.4
+[source,sh,role=execute,subs=attributes+]
+----
+pip3 install git+https://github.com/instructlab/instructlab.git@v0.18.4
 
-// ----
-// +
+----
++
 
-// NOTE: `pip install` may take some time, depending on the internet connection available at the conference or if the files have been cached locally.
+NOTE: `pip install` may take some time, depending on the internet connection available at the conference or if the files have been cached locally.
 
 [start=2]
 . From your venv environment, verify ilab is installed correctly by running the ilab command.
@@ -124,11 +124,13 @@ Usage: ilab [OPTIONS] COMMAND [ARGS]...
   CLI for interacting with InstructLab.
 
 
-  If this is your first time running ilab, it's best to start with `ilab config init`
+  If this is your first time running ilab, it's best to start with `ilab config config init`
   to create the environment.
 
 
 Options:
+  --config PATH  Path to a configuration file.  [default: /home/instruct/.config/instructlab/config.yaml]
+  -v, --verbose  Enable debug logging (repeat for even more verbosity)
   --config PATH  Path to a configuration file.  [default: /home/instruct/.config/instructlab/config.yaml]
   -v, --verbose  Enable debug logging (repeat for even more verbosity)
   --version      Show the version and exit.
@@ -154,7 +156,6 @@ Aliases:
   sysinfo   system info
   test      model test
   train     model train
-
 ----
 
 
@@ -178,31 +179,10 @@ Please provide the following values to initiate the environment [press Enter for
 
 NOTE: While traditionally you'll be prompted to download the taxonomy and configure options, here you can just it kbd:[ENTER] for the default settings.
 
-// [subs=quotes]
-// ----
-// Path to taxonomy repo [/home/instruct/.local/share/instructlab/taxonomy]: 
-// ----
+The last step of the ilab configuration is to select a train profile. Train profiles are GPU specific profiles that enable accelerated training behavior. If you are on MacOS or a Linux machine without a dedicated GPU, please choose No Profile (CPU-Only) by hitting Enter. There are various flags you can utilize with individual ilab commands that will allow you to utilize your GPU if applicable. **For this lab**, we will use NVIDIA L4 GPUs. Select the L4_x8.yaml option at the following prompt.
 
-// NOTE: When prompted to provide the path to the taxonomy repo, hit kbd:[ENTER] 
-
-// [subs=quotes]
-// ----
-// `/home/instruct/.local/share/instructlab/taxonomy` seems to not exist or is empty. Should I clone https://github.com/instructlab/taxonomy.git for you? [Y/n]: Y
-Cloning https://github.com/instructlab/taxonomy.git...
-// ----
-
-// NOTE: If asked if the CLI should clone the taxonomy repo, input 'Y' as shown in the above output.
-
-// [source,sh]
-// ----
-// Path to your model [/home/instruct/.cache/instructlab/models/merlinite-7b-lab-Q4_K_M.gguf]: 
-Generating `/home/instruct/.config/instructlab/config.yaml`...
-// ----
-
-// NOTE: When asked to enter a directory for the model file, use the default and hit <ENTER>
-
-[subs=quotes]
 ----
+Generating `/home/instruct/.config/instructlab/config.yaml` and `/home/instruct/.local/share/instructlab/internal/train_configuration/profiles`...
 Please choose a train profile to use:
 [0] No profile (CPU-only)
 [1] A100_H100_x2.yaml
@@ -211,17 +191,24 @@ Please choose a train profile to use:
 [4] L40_x4.yaml
 [5] L40_x8.yaml
 [6] L4_x8.yaml
-Enter the number of your choice [hit enter for the default CPU-only profile] [0]: 
+Enter the number of your choice [hit enter for the default CPU-only profile] [0]: 6
 ----
-// NOTE: When asked to enter a train profile, enter 6 as shown in the above output.
 
-* Several things happen during the initialization phase: A default taxonomy is located on the local file system, and a configuration file (config.yaml) is created in the current directory.
-* The config.yaml file contains defaults we will use during this workshop. After this workshop, when you begin playing around with InstructLab, it is important to understand the contents of the configuration file so that you can tune the parameters to your liking
+NOTE: When prompted to enter a training profile, enter 6 as shown in the above output.
+
+[subs=quotes]
+----
+You selected: L4_x8.yaml
+Initialization completed successfully, you're ready to start using `ilab`. Enjoy!
+----
+
+* Several things happen during the initialization phase: A default taxonomy is located on the local file system, and a configuration file (config.yaml) is created in the 'home/instruct/.config/instructlab/' directory.
+* The config.yaml file contains defaults we will use during this workshop. After this workshop, when you begin playing around with InstructLab, it is important to understand the contents of the configuration file so that you can tune the parameters to your liking.
 
 [#download]
 === Download the model
 
-With the InstructLab environment configured, you can now download a quantized (compressed and optimized) model to your local directory, to be used as a model server for API requests, or to help train a new model as we'll do in this workshop. Run the `ilab model download` command.
+With the InstructLab environment configured, you can now download a quantized (compressed and optimized) model to your local directory, to be used as a model server for API requests, or to help train a new model as we'll do in this workshop. Run the `ilab model download` command as shown below:
 
 [source,sh,role=execute,subs=attributes+]
 ----
@@ -230,13 +217,14 @@ ilab model download --repository instructlab/granite-7b-lab-GGUF --filename=gran
 
 The `ilab model download` command downloads a model from the HuggingFace instructlab organization that we will use for this workshop. The output should look like the following:
 
-// NOTE: *This command may not show the contents if the model is being cached on the local machine.*
-
 [subs=quotes]
 ----
-Downloading model from downloading model from instructlab/granite-7b-lab-GGUF@main to models...
-Downloading 'granite-7b-lab-Q4_K_M.gguf' to 'models/.huggingface/download/granite-7b-lab-Q4_K_M.gguf.6adeaad8c048b35ea54562c55e454cc32c63118a32c7b8152cf706b290611487.incomplete'
-INFO 2024-05-06 16:46:24,394 file_download.py:1877 Downloading 'granite-7b-lab-Q4_K_M.gguf' to 'models/.huggingface/download/granite-7b-lab-Q4_K_M.gguf.6adeaad8c048b35ea54562c55e454cc32c63118a32c7b8152cf706b290611487.incomplete'100%|█████████████████████████████████████████████████████████████| 4.08G/4.08G [00:36<00:00, 110MB/s]
+Downloading model from Hugging Face: instructlab/granite-7b-lab-GGUF@main to /home/instruct/.cache/instructlab/models...
+Downloading 'granite-7b-lab-Q4_K_M.gguf' to '/home/instruct/.cache/instructlab/models/.cache/huggingface/download/granite-7b-lab-Q4_K_M.gguf.6adeaad8c048b35ea54562c55e454cc32c63118a32c7b8152cf706b290611487.incomplete'
+INFO 2024-09-10 16:51:32,740 huggingface_hub.file_download:1908: Downloading 'granite-7b-lab-Q4_K_M.gguf' to '/home/instruct/.cache/instructlab/models/.cache/huggingface/download/granite-7b-lab-Q4_K_M.gguf.6adeaad8c048b35ea54562c55e454cc32c63118a32c7b8152cf706b290611487.incomplete'
+granite-7b-lab-Q4_K_M.gguf: 100%|█| 4.08G/4.08G [00:19<00:00, 207
+Download complete. Moving file to /home/instruct/.cache/instructlab/models/granite-7b-lab-Q4_K_M.gguf
+INFO 2024-09-10 16:51:52,562 huggingface_hub.file_download:1924: Download complete. Moving file to /home/instruct/.cache/instructlab/models/granite-7b-lab-Q4_K_M.gguf
 ----
 
 Now that the model has been downloaded, we can serve and chat with the model. Serving the model simply means we are going to run a server that will allow other programs to interact with the data similar to making an API call. 
