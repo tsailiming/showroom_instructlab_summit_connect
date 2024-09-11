@@ -255,7 +255,7 @@ Because you’re serving the model in one terminal window, you will have to use 
 
 // Note: You can open a new tab in your terminal by hitting the command-t keyboard combination. If you need assistance, please ask a Red Hatter in the InstructLab Lounge.
 
-. In the bottom terminal window, issue the following commands:
+. In the *bottom* terminal window, issue the following commands:
 
 [source,sh,role=execute,subs=attributes+]
 ----
