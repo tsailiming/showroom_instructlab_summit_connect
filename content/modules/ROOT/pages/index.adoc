@@ -153,21 +153,22 @@ Commands:
 [#initialize]
 === Initialize ilab
 
-Now that we know that the command-line interface `ilab` is working correctly, the next thing we need to do is initialize the local environment so that we can begin working with the model. This is accomplished by issuing a simple init command. Initialize ilab by running the following command:
+Now that we know that the command-line interface `ilab` is working correctly, the next thing we need to do is initialize the local environment so that we can begin working with the model. This is accomplished by issuing a simple init command. Initialize `ilab` by running the following command:
 
 [source,sh,role=execute,subs=attributes+]
 ----
 ilab config init
 ----
+
 .You should see the following output:
+
 [subs=quotes]
 ----
-Found config.yaml in the current directory, do you still want to continue? [y/N]: **y**
 Welcome to InstructLab CLI. This guide will help you to setup your environment.
 Please provide the following values to initiate the environment [press Enter for defaults]:
 ----
 
-NOTE: While traditionally you'll be prompted to download the taxonomy and configure options, here you can just it kbd:[ENTER] for the default settings.
+NOTE: While traditionally you'll be prompted to configure options and download the taxonomy, here you can just it kbd:[ENTER] for the default settings.
 
 // When prompted to accept the `config.yaml`, hit kbd:[ENTER]
 
@@ -194,13 +195,13 @@ NOTE: While traditionally you'll be prompted to download the taxonomy and config
 
 [subs=quotes]
 ----
-Cloning git@github.com:instruct-lab/taxonomy.git...
+Path to taxonomy repo [taxonomy]:
 Generating `config.yaml` in the current directory...
 Initialization completed successfully, you're ready to start using `ilab`. Enjoy!
 ----
 
 * Several things happen during the initialization phase: A default taxonomy is located on the local file system, and a configuration file (config.yaml) is created in the current directory.
-* The config.yaml file contains defaults we will use during this workshop. After this workshop, when you begin playing around with InstructLab, it is important to understand the contents of the configuration file so that you can tune the parameters to your liking
+* The config.yaml file contains defaults we will use during this workshop. After this workshop, when you begin playing around with InstructLab, it is important to understand the contents of the configuration file so that you can tune the parameters to your liking.
 
 [#download]
 === Download the model
