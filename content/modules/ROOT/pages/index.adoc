@@ -251,7 +251,7 @@ INFO 2024-04-23 17:17:02,861 server.py:156 After application startup complete se
 [#chat]
 === Chat with the model
 
-Because you’re serving the model in one terminal window, you will have to create a new window and re-activate your Python virtual environment to run the ilab chat command. 
+Because you’re serving the model in one terminal window, you will have to use a separate terminal window and re-activate your Python virtual environment to run the ilab chat command. 
 
 // Note: You can open a new tab in your terminal by hitting the command-t keyboard combination. If you need assistance, please ask a Red Hatter in the InstructLab Lounge.
 
@@ -281,7 +281,7 @@ You should see a chat prompt like the example below.
 [source,sh]
 ----
 ╭───────────────────────────────────────────────────────────────────────────╮
-│ Welcome to Chat CLI w/ MODELS/GRANITE-7B-LAB-Q4_K_M.GGUF (type /h for help)                                                                                                                            
+│ Welcome to InstructLab Chat w/ MODELS/GRANITE-7B-LAB-Q4_K_M.GGUF (type /h for help)                                                                                                                            
 ╰───────────────────────────────────────────────────────────────────────────╯
 >>> 
 ----
@@ -327,7 +327,7 @@ You can read the details of the claim on this page and even expand the image of 
 
 image::parasol-chat.webp[width=350]
 
-IMPORTANT: This chatbot is backed by the InstructLab model you served earlier, so if you killed that running process you will need to restart it in your terminal by running the following: `ilab model chat -m models/granite-7b-lab-Q4_K_M.gguf``
+IMPORTANT: This chatbot is backed by the Granite model you served earlier, so if you killed that running process you will need to restart it in your terminal by running the following: `ilab model serve --model-path models/granite-7b-lab-Q4_K_M.gguf`
 
 // [source,sh,role=execute,subs=attributes+]
 // ----
@@ -344,24 +344,26 @@ Let's imagine as a claims agent you'd like to know how much it might cost to rep
 How much does it cost to repair a flux capacitor?
 ----
 
-You should see something similar to the following. Note that LLMs by nature are non-deterministic, so your results may vary slightly.
+You should see something similar to the following. Note that LLMs by nature are non-deterministic. This means that even with the same prompt input, the model will produce varying responses. So, your results may vary slightly.
 
 image::parasol-chat-response.webp[width=350]
 
-What we've already started to do is provide contextual information about the claim in each conversation with the LLM using Prompt Engineering. But unfortunately, the chatbot doesn't know how much it costs to repair a flux capacitor, or any domain-specific knowledge for our organization. With InstructLab and RHEL-AI, we can change that by teaching the model!
+What we've already started to do is provide contextual information about the claim in each conversation with the LLM using Prompt Engineering. But unfortunately, the chatbot doesn't know how much it costs to repair a flux capacitor, or any domain-specific knowledge for our organization. With InstructLab and RHEL AI, we can change that by teaching the model!
 
 [#taxononmy]
 === Understanding the Taxonomy
 
 InstructLab uses a novel synthetic data-based alignment tuning method for Large Language Models (LLMs.) The "lab" in InstructLab stands for **L**arge-scale **A**lignment for Chat **B**ots. The LAB method is driven by taxonomies, which are largely created manually and with care.
 
-InstructLab crowdsources the process of tuning and improving models by collecting two types of data: knowledge and skills in a new open source community. These submissions are collected in a taxonomy of YAML files to be used in the synthetic data generation process. To help you understand the directory structure of a taxonomy, please refer to the following image.
+InstructLab crowdsources the process of tuning and improving models by collecting two types of data: knowledge and skills in the new InstructLab open source community. These submissions are collected in a taxonomy of YAML files to be used in the synthetic data generation process. To help you understand the directory structure of a taxonomy, please refer to the following image.
 
 image::taxonomy.png[]
 
 We are now going to leverage the taxonomy model to teach the model knowledge about a specific vehicle we cover and its details, from our organization's collection of public (and private) internal data.
 
-. Verify you have the taxonomy directory in the working directory you are in.
+Navigate back to the *Terminals* view. In the terminal window where you are running chat, enter `exit` to quit the chat session.
+
+. Navigate to the taxonomy directory.
 
 [source,sh,role=execute,subs=attributes+]
 ----
@@ -402,7 +404,7 @@ The way the taxonomy approach works is that we provide a file, named `qna.yaml`,
 The `qna.yaml` file is placed in a folder within the `knowledge` subdirectory of the taxonomy directory. It is placed in a folder with an appropriate name that is aligned with the data topic, as you will see in the below command.
 
 [start=4]
-. Instead of having to type a bunch of information in by hand, simply run the following command to copy this example https://raw.githubusercontent.com/gshipley/backToTheFuture/main/qna.yaml[`qna.yaml`] file to your taxonomy directory:
+. Instead of having to type a bunch of information in by hand, simply run the following command to copy this example https://raw.githubusercontent.com/rhai-code/backToTheFuture/main/qna.yaml[`qna.yaml`] file to your taxonomy directory:
 
 [source,sh,role=execute,subs=attributes+]
 ----
@@ -419,13 +421,13 @@ head ~/instructlab/taxonomy/knowledge/parasol/claims/qna.yaml
 
 During this workshop, we don’t expect you to type all of this information in by hand - we are including the content here for your reference.
 
-It's a YAML file that consists of a list of Q&A examples that will be used by the trainer model to teach the student model. There is also a source document which is a link to a specific commit of a text file in git, where https://github.com/gshipley/backToTheFuture/blob/main/data.md[we've included] that a flux capacitor costs an affordable $10,000,000.
+It's a YAML file that consists of a list of Q&A examples that will be used by the trainer model to teach the student model. There is also a source document which is a link to a specific commit of a text file in git, where https://github.com/gshipley/backToTheFuture/blob/main/data.md[we've included] that a flux capacitor costs an affordable $10,000,000. To help you understand the Q&A file format, we have included it below.
 
 [source,yaml]
 ----
-created_by: Marty_McFly
-domain: parasol
-seed_examples:
+created_by: Marty_McFly<1>
+domain: parasol<2>
+seed_examples:<3>
 - answer: The DeLorean was manufactured from 1981 to 1983.
   question: When was the DeLorean manufactured?
 - answer: The DeLorean Motor Company manufactured the DeLorean DMC-12.
@@ -442,16 +444,23 @@ seed_examples:
   question: What does maintenance for a DeLorean DMC12 look like?
 - answer: It costs between $800 and $1000 to repair the suspension on a DeLorean DMC-12.
   question: How much does it cost to repair the supension on a DeLorean DMC-12?
-task_description: 'Details on instructlab community project'
-document:
+task_description: 'Details on instructlab community project'<4>
+document:<5>
   repo: https://github.com/gshipley/backToTheFuture.git
   commit: 8bd9220c616afe24b9673d94ec1adce85320809c
-  patterns:
+  patterns:<6>
     - data.md
 ----
 
+<1> `created_by`: The author of the contribution, typically a GitHub username
+<2> `domain`: Category of the knowledge
+<3> `seed_examples`: Five or more examples sourced from the provided knowledge documents, representing a `question` for the model and desired `response`
+<4> `task_description`: An optional description of the knowledge for easily understanding the specific knowledge contribution
+<5> `document`: The source of your knowledge contribution, consisting of a `repo` URL pointing to the knowlege markdown files, and `commit` SHA that contains the specific files
+<6> `patterns`: A list of glob patterns specifying the markdown file(s) in your repository.
+
 [start=6]
-. Verification that the seed data is curated properly.
+. Now, it's time to verify that the seed data is curated properly.
 
 InstructLab allows you to validate your taxonomy files before generating additional data. You can accomplish this by using the `ilab taxonomy diff` command as shown below:
 
@@ -474,7 +483,14 @@ Taxonomy in /taxonomy/ is valid :)
 
 Okay, so far so good. Now, let’s move on to the AWESOME part. We are going to use our taxonomy, which contains our `qna.yaml` file, to have the LLM automatically generate more examples. The generate step can often take a while and is dependent on the number of instructions that you want to generate. In other words, this means that InstructLab will generate X number of additional questions and answers based on the samples provided. To give you an idea of how long this takes, generating 100 additional questions and answers typically takes about 7 minutes when using a nicely specced consumer-grade GPU-accelerated Linux machine. This can take around 15 minutes using Apple Silicon and depends on many factors. For the purpose of this workshop, we are only going to generate 5 additional samples. To do this, issue the following commands:
 
-. We will now run the command (in the second Terminal) to generate the synthetic data:
+. We will now run the command to generate data in the current terminal. The other terminal should still be serving the Granite model from earlier. If the model is no longer being served, serve the model again with the following command (in the other terminal window):
+
+[source,sh,role=execute,subs=attributes+]
+----
+ilab model serve --model-path models/granite-7b-lab-Q4_K_M.gguf
+----
+
+. Now run the following command in the terminal window that is not serving the model:
 
 [source,sh,role=execute,subs=attributes+]
 ----
@@ -499,7 +515,7 @@ Now that we have generated additional data, we can use the ilab train command to
 
 NOTE: Generating 5 additional examples is generally not enough to effectively impact the knowledge or skill of a model. However, due to time constraints of this workshop, the goal is to simply show you how this works using real commands. You would typically want to generate 100 or even 1000 additional data points. Even still, training on a laptop is more of a technology demonstration than something you'd want to do to train production LLMs. For training production LLMs, Red Hat provides RHEL AI and OpenShift AI.
 
-Once the new data has been generated, the next step is to train the model with the updated skill. This is performed with the ilab train command.
+Once the new data has been generated, the next step is to train the model with the updated knowledge. This is performed with the ilab train command.
 
 NOTE: Training using the newly generated data is a time and resource intensive task. Depending on the number of iterations desired, internet connection for safetensor downloading, and other factors, it can take from 20 minutes up to an hour. It is not required to train the model to continue with the lab as we will use an already trained model that was created using a generate step with 2500 instructions and 300 iterations.
 
