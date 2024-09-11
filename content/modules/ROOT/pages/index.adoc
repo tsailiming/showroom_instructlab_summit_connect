@@ -483,14 +483,15 @@ Taxonomy in /taxonomy/ is valid :)
 
 Okay, so far so good. Now, let’s move on to the AWESOME part. We are going to use our taxonomy, which contains our `qna.yaml` file, to have the LLM automatically generate more examples. The generate step can often take a while and is dependent on the number of instructions that you want to generate. In other words, this means that InstructLab will generate X number of additional questions and answers based on the samples provided. To give you an idea of how long this takes, generating 100 additional questions and answers typically takes about 7 minutes when using a nicely specced consumer-grade GPU-accelerated Linux machine. This can take around 15 minutes using Apple Silicon and depends on many factors. For the purpose of this workshop, we are only going to generate 5 additional samples. To do this, issue the following commands:
 
-. We will now run the command to generate data in the current terminal. The other terminal should still be serving the Granite model from earlier. If the model is no longer being served, serve the model again with the following command (in the other terminal window):
+. We will now run the command to generate data in the current terminal. The *upper* terminal should still be serving the Granite model from earlier. If the model is no longer being served, serve the model again with the following command (in the other *upper* window):
 
 [source,sh,role=execute,subs=attributes+]
 ----
 ilab model serve --model-path models/granite-7b-lab-Q4_K_M.gguf
 ----
 
-. Now run the following command in the terminal window that is not serving the model:
+[start=2]
+. Now run the following command in the terminal window that is not serving the model, or the *bottom* window:
 
 [source,sh,role=execute,subs=attributes+]
 ----
@@ -553,7 +554,7 @@ LINUX_TRAIN.PY: LOADING THE BASE MODEL
 Loading checkpoint shards: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [00:00<00:00,  5.95it/s]
 ----
 
-. Since this process will take over an hour to complete we have provided a model that has already been through this process. In order to serve the newly trained model you can run the following:
+. Since this process will take over an hour to complete we have provided a model that has already been through this process. First, let's stop the current model server in the *upper* window, with bd:[CTRL+C]) on the keyboard. In order to serve the newly trained model you can now run the following in the *upper* command window:
 
 [source,sh,role=execute,subs=attributes+]
 ----
