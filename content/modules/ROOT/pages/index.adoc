@@ -164,20 +164,23 @@ Aliases:
 [#initialize]
 === Initialize ilab
 
-Now that we know that the command-line interface `ilab` is working correctly, the next thing we need to do is initialize the local environment so that we can begin working with the model. This is accomplished by issuing a simple init command. Initialize ilab by running the following command:
+Now that we know that the command-line interface `ilab` is working correctly, the next thing we need to do is initialize the local environment so that we can begin working with the model. This is accomplished by issuing a simple init command. Initialize `ilab` by running the following command:
 
 [source,sh,role=execute,subs=attributes+]
 ----
 ilab config init
 ----
+
 You should see the following output (press Enter for defaults):
+
 [subs=quotes]
 ----
 Welcome to InstructLab CLI. This guide will help you to setup your environment.
 Please provide the following values to initiate the environment [press Enter for defaults]:
+Path to taxonomy repo [taxonomy]:
 ----
 
-NOTE: While traditionally you'll be prompted to download the taxonomy and configure options, here you can just it kbd:[ENTER] for the default settings.
+NOTE: While traditionally you'll be prompted to configure options and download the taxonomy, here you can just it kbd:[ENTER] for the default settings.
 
 The last step of the ilab configuration is to select a train profile. Train profiles are GPU specific profiles that enable accelerated training behavior. If you are on MacOS or a Linux machine without a dedicated GPU, please choose No Profile (CPU-Only) by hitting Enter. There are various flags you can utilize with individual ilab commands that will allow you to utilize your GPU if applicable. **For this lab**, we will use NVIDIA L4 GPUs. Select the L4_x8.yaml option at the following prompt.
 
@@ -275,7 +278,7 @@ INFO 2024-09-10 18:12:16,026 instructlab.model.backends.llama_cpp:194: After app
 
 Because you’re serving the model in one terminal window, you will have to use a separate terminal window and re-activate your Python virtual environment to run the ilab chat command. 
 
-. In the bottom terminal window, issue the following commands:
+. In the *bottom* terminal window, issue the following commands:
 
 [source,sh,role=execute,subs=attributes+]
 ----
@@ -360,9 +363,11 @@ How much does it cost to repair a flux capacitor?
 ----
 
 You should see something similar to the following. Note that LLMs by nature are non-deterministic. This means that even with the same prompt input, the model will produce varying responses. So, your results may vary slightly.
+You should see something similar to the following. Note that LLMs by nature are non-deterministic. This means that even with the same prompt input, the model will produce varying responses. So, your results may vary slightly.
 
 image::parasol-chat-response.webp[width=350]
 
+What we've already started to do is provide contextual information about the claim in each conversation with the LLM using Prompt Engineering. But unfortunately, the chatbot doesn't know how much it costs to repair a flux capacitor, or any domain-specific knowledge for our organization. With InstructLab and RHEL AI, we can change that by teaching the model!
 What we've already started to do is provide contextual information about the claim in each conversation with the LLM using Prompt Engineering. But unfortunately, the chatbot doesn't know how much it costs to repair a flux capacitor, or any domain-specific knowledge for our organization. With InstructLab and RHEL AI, we can change that by teaching the model!
 
 [#taxononmy]
@@ -371,11 +376,15 @@ What we've already started to do is provide contextual information about the cla
 InstructLab uses a novel synthetic data-based alignment tuning method for Large Language Models (LLMs.) The "lab" in InstructLab stands for **L**arge-scale **A**lignment for Chat **B**ots. The LAB method is driven by taxonomies, which are largely created manually and with care.
 
 InstructLab crowdsources the process of tuning and improving models by collecting two types of data: knowledge and skills in the new InstructLab open source community. These submissions are collected in a taxonomy of YAML files to be used in the synthetic data generation process. To help you understand the directory structure of a taxonomy, please refer to the following image.
+InstructLab crowdsources the process of tuning and improving models by collecting two types of data: knowledge and skills in the new InstructLab open source community. These submissions are collected in a taxonomy of YAML files to be used in the synthetic data generation process. To help you understand the directory structure of a taxonomy, please refer to the following image.
 
 image::taxonomy.png[]
 
 We are now going to leverage the taxonomy model to teach the model knowledge about a specific vehicle we cover and its details, from our organization's collection of public (and private) internal data.
 
+Navigate back to the *Terminals* view. In the terminal window where you are running chat, enter `exit` to quit the chat session.
+
+. Navigate to the taxonomy directory.
 Navigate back to the *Terminals* view. In the terminal window where you are running chat, enter `exit` to quit the chat session.
 
 . Navigate to the taxonomy directory.
@@ -419,6 +428,7 @@ The way the taxonomy approach works is that we provide a file, named `qna.yaml`,
 The `qna.yaml` file is placed in a folder within the `knowledge` subdirectory of the taxonomy directory. It is placed in a folder with an appropriate name that is aligned with the data topic, as you will see in the below command.
 
 [start=4]
+. Instead of having to type a bunch of information in by hand, simply run the following command to copy this example https://raw.githubusercontent.com/rhai-code/backToTheFuture/main/qna.yaml[`qna.yaml`] file to your taxonomy directory:
 . Instead of having to type a bunch of information in by hand, simply run the following command to copy this example https://raw.githubusercontent.com/rhai-code/backToTheFuture/main/qna.yaml[`qna.yaml`] file to your taxonomy directory:
 
 [source,sh,role=execute,subs=attributes+]
@@ -473,12 +483,19 @@ document_outline: |
 document:
   repo: https://github.com/gshipley/backToTheFuture.git
   commit: 8bd9220c616afe24b9673d94ec1adce85320809c
-  patterns:
+  patterns:<6>
     - data.md
 ----
 
+<1> `created_by`: The author of the contribution, typically a GitHub username
+<2> `domain`: Category of the knowledge
+<3> `seed_examples`: Five or more examples sourced from the provided knowledge documents, representing a `question` for the model and desired `response`
+<4> `task_description`: An optional description of the knowledge for easily understanding the specific knowledge contribution
+<5> `document`: The source of your knowledge contribution, consisting of a `repo` URL pointing to the knowlege markdown files, and `commit` SHA that contains the specific files
+<6> `patterns`: A list of glob patterns specifying the markdown file(s) in your repository.
+
 [start=6]
-. Verification that the seed data is curated properly.
+. Now, it's time to verify that the seed data is curated properly.
 
 InstructLab allows you to validate your taxonomy files before generating additional data. You can accomplish this by using the `ilab taxonomy diff` command as shown below:
 
@@ -572,7 +589,7 @@ LINUX_TRAIN.PY: LOADING THE BASE MODEL
 Loading checkpoint shards: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [00:00<00:00,  5.95it/s]
 ----
 
-. Since this process will take over an hour to complete we have provided a model that has already been through this process. In order to serve the newly trained model you can run the following:
+. Since this process will take over an hour to complete we have provided a model that has already been through this process. First, let's stop the current model server in the *upper* window, with bd:[CTRL+C]) on the keyboard. In order to serve the newly trained model you can now run the following in the *upper* command window:
 
 [source,sh,role=execute,subs=attributes+]
 ----
