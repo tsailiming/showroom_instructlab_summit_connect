@@ -166,6 +166,7 @@ ilab config init
 ----
 Welcome to InstructLab CLI. This guide will help you to setup your environment.
 Please provide the following values to initiate the environment [press Enter for defaults]:
+Path to taxonomy repo [taxonomy]:
 ----
 
 NOTE: While traditionally you'll be prompted to configure options and download the taxonomy, here you can just it kbd:[ENTER] for the default settings.
@@ -195,7 +196,6 @@ NOTE: While traditionally you'll be prompted to configure options and download t
 
 [subs=quotes]
 ----
-Path to taxonomy repo [taxonomy]:
 Generating `config.yaml` in the current directory...
 Initialization completed successfully, you're ready to start using `ilab`. Enjoy!
 ----
