@@ -169,7 +169,7 @@ Please provide the following values to initiate the environment [press Enter for
 Path to taxonomy repo [taxonomy]:
 ----
 
-NOTE: While traditionally you'll be prompted to configure options and download the taxonomy, here you can just it kbd:[ENTER] for the default settings.
+IMPORTANT: While traditionally you'll be prompted to configure options and download the taxonomy, here you can just it kbd:[ENTER] for the default settings.
 
 // When prompted to accept the `config.yaml`, hit kbd:[ENTER]
 
