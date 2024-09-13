@@ -42,12 +42,12 @@ Large language models (LLMs) are typically trained using deep learning technique
 . *Pre-processing*: The raw text data is pre-processed to remove noise, inconsistencies, and irrelevant information. This may include tokenization, lowercasing, stemming, lemmatization, and encoding.
 . *Tokenization*: The pre-processed text data is converted into tokens (words or subwords) that can be used as input and output to the model. Some models use byte-pair encoding (BPE) or subword segmentation to create tokens that can handle out-of-vocabulary words and maintain contextual information.
 . *Pre-training*: The model is trained in an unsupervised or self-supervised manner to learn patterns and structures in the data.
-. *Model Alignment*: (instruction tuning and preference tuning): The process of encoding human values and goals into large language models to make them as helpful, safe, and reliable as possible. This step is not as compute intensive as some of the other steps.
+. *Model Alignment*: (instruction tuning and preference tuning): The process of encoding human values and goals into large language models to make them as helpful, safe, and as reliable as possible. This step is not as compute intensive as some of the other steps.
 
 [#instructlab]
 === How does this relate to InstructLab?
 
-InstructLab leverages a taxonomy-guided synthetic data generation process and a multi-phase tuning framework. This allows InstructLab to significantly reduce reliance on expensive human annotations, making contributing to a large language model easy and accessible. This means that InstructLab can use the LLM to generate data, which is then used to further train the LLM. It also means that the alignment phase becomes most user’s starting point for contributing their knowledge.  Prior to the LAB technique, users typically had no direct involvement in training an LLM. I know this may sound complicated, but hang in there. You will see how easy this is to use.
+InstructLab leverages a taxonomy-guided synthetic data generation process and a multi-phase tuning framework. This allows InstructLab to significantly reduce reliance on expensive human annotations, making contributing to a large language model easy and accessible. This means that InstructLab can use the LLM to generate data, which is then used to further train the LLM. It also means that the alignment phase becomes most users' starting point for contributing their knowledge.  Prior to the LAB technique, users typically had no direct involvement in training an LLM. I know this may sound complicated, but hang in there. You will see how easy this is to use.
 
 As you work with InstructLab, you will see the terms Skills and Knowledge. What is the difference between Skills and Knowledge? A simple analogy is to think of a skill as teaching someone how to fish. Knowledge, on the other hand, is knowing that the best place to catch a Bass is when the sun is setting while casting your line near the trunk of a tree along the bank.
 
@@ -60,9 +60,9 @@ We created a CLI tool called https://github.com/instructlab/instructlab[ilab] th
 
 . Apple M1/M2/M3 Mac
 . Linux systems
-. Windows 11 under a WSL environment
+. Windows 11 within a WSL environment
 
-During this lab, we will be using the ilab command line tools on a Red Hat Enterprise Linux system. During this lab, we will be using the ilab command line tools on a Red Hat Enterprise Linux system. We anticipate support for more operating systems in the future. The system requirements to use the command line tool are as follows:
+During this lab, we will be using the ilab command line tools on a Red Hat Enterprise Linux system. We anticipate support for more operating systems in the future. The system requirements to use the command line tool are as follows:
 
 . C++ compiler
 . Python 3.10+
@@ -70,11 +70,11 @@ During this lab, we will be using the ilab command line tools on a Red Hat Enter
 .. Disk space requirements are dependent on several factors. Keep in mind that we will be generating data to feed to the model while also having the model locally on our system. For example, the model we are working with during this workshop is roughly 5gb in size.
 
 [#installation]
-=== Installing ilab
+=== Configuring ilab
 
 The first thing we need to do is to source a Python virtual environment that will allow us to interact with the InstructLab command line tools. While you have two terminal windows available on your right, let's start with the *upper* window. 
 
-. Activate the python virtual environment by running the following commands:
+. Navigate to the preset InstructLab folder and activate the python virtual environment by running the following commands:
 +
 
 [source,sh,role=execute,subs=attributes+]
@@ -83,7 +83,7 @@ cd ~/instructlab
 source venv/bin/activate
 ----
 +
-.Your Prompt should now look like this
+.Your prompt should now look like this
 
 [subs=quotes]
 ----
@@ -91,20 +91,20 @@ source venv/bin/activate
 ----
 +
 
-. Install the command line tool using the pip command
-+
+// . Install the command line tool using the pip command
+// +
 
-[source,sh,role=execute,subs=attributes+]
-----
-pip3 install git+https://github.com/instructlab/instructlab.git@v0.18.4
+// [source,sh,role=execute,subs=attributes+]
+// ----
+// pip3 install git+https://github.com/instructlab/instructlab.git@v0.18.4
 
-----
-+
+// ----
+// +
 
-NOTE: `pip install` may take some time, depending on the internet connection available at the conference or if the files have been cached locally.
+// NOTE: `pip install` may take some time, depending on the internet connection available at the conference or if the files have been cached locally.
 
 [start=2]
-. From your venv environment, verify ilab is installed correctly by running the ilab command.
+. InstructLab is already pre-installed. From your venv environment, verify ilab is installed correctly by running the ilab command.
 +
 
 [source,sh,role=execute,subs=attributes+]
@@ -182,7 +182,7 @@ Path to taxonomy repo [taxonomy]:
 
 NOTE: While traditionally you'll be prompted to configure options and download the taxonomy, here you can just it kbd:[ENTER] for the default settings.
 
-The last step of the ilab configuration is to select a train profile. Train profiles are GPU specific profiles that enable accelerated training behavior. If you are on MacOS or a Linux machine without a dedicated GPU, please choose No Profile (CPU-Only) by hitting Enter. There are various flags you can utilize with individual ilab commands that will allow you to utilize your GPU if applicable. **For this lab**, we will use NVIDIA L4 GPUs. Select the L4_x8.yaml option at the following prompt.
+The last step of the ilab configuration is to select a train profile. Train profiles are GPU specific profiles that enable accelerated training behavior. If you are on MacOS or a Linux machine without a dedicated GPU, please choose No Profile (CPU-Only) by hitting Enter. There are various flags you can utilize with individual ilab commands that will allow you to utilize your GPU if applicable. **For this lab**, we will a single NVIDIA L4 GPU. Select the L4_x4.yaml option at the following prompt.
 
 ----
 Generating `/home/instruct/.config/instructlab/config.yaml` and `/home/instruct/.local/share/instructlab/internal/train_configuration/profiles`...
@@ -194,6 +194,7 @@ Please choose a train profile to use:
 [4] L40_x4.yaml
 [5] L40_x8.yaml
 [6] L4_x8.yaml
+[7] L4_x4.yaml
 Enter the number of your choice [hit enter for the default CPU-only profile] [0]: 6
 ----
 
@@ -201,7 +202,7 @@ NOTE: When prompted to enter a training profile, enter 6 as shown in the above o
 
 [subs=quotes]
 ----
-You selected: L4_x8.yaml
+You selected: L4_x4.yaml
 Initialization completed successfully, you're ready to start using `ilab`. Enjoy!
 ----
 
@@ -211,14 +212,18 @@ Initialization completed successfully, you're ready to start using `ilab`. Enjoy
 [#download]
 === Download the model
 
-With the InstructLab environment configured, you can now download a quantized (compressed and optimized) model to your local directory, to be used as a model server for API requests, or to help train a new model as we'll do in this workshop. Run the `ilab model download` command as shown below:
+With the InstructLab environment configured, you will now download a quantized (compressed and optimized) model to your local directory, to be used as a model server for API requests, or to help train a new model as we'll do in this workshop. 
+
+NOTE: We are using a quantized model because we are only leveraging a single GPU for this lab. For better performance or production use cases, you would use unquantized models.
+
+Run the `ilab model download` command as shown below:
 
 [source,sh,role=execute,subs=attributes+]
 ----
 ilab model download --repository instructlab/granite-7b-lab-GGUF --filename=granite-7b-lab-Q4_K_M.gguf
 ----
 
-The `ilab model download` command downloads a model from the HuggingFace instructlab organization that we will use for this workshop. The output should look like the following:
+The `ilab model download` command downloads a model from the HuggingFace Instructlab organization that we will use for this workshop. The output should look like the following:
 
 [subs=quotes]
 ----
@@ -332,7 +337,7 @@ Parasol has a chatbot application infused with AI (the Granite model) to provide
 
 Let's start by taking a look at the current experience a claims agent has when interacting with the chatbot. 
 
-. While you may currently be in the *Terminals* view, switch to *Parasol* to see the Parasol company's claims application in your browser.
+. While you may currently be in the *Terminals* view, switch to *Parasol* (in the top bar above the upper terminal window) to see the Parasol company's claims application in your browser.
 
 image::parasol-view.png[]
 
@@ -350,7 +355,7 @@ You can read the details of the claim on this page and even expand the image of 
 
 image::parasol-chat.webp[width=350]
 
-IMPORTANT: This chatbot is backed by the InstructLab model you served earlier, so if you killed that running process you will need to restart it in your terminal by running the following: `ilab model chat -m /home/instruct/.cache/instructlab/models/granite-7b-lab-Q4_K_M.gguf`
+IMPORTANT: This chatbot is backed by the Granite model you served earlier, so if you killed that running process you will need to restart it in your terminal by running the following: `ilab model serve --model-path /home/instruct/.cache/instructlab/models/granite-7b-lab-Q4_K_M.gguf`
 
 Let's imagine as a claims agent you'd like to know how much it might cost to repair a flux capacitor on Marty's DeLorean. 
 
@@ -367,8 +372,8 @@ You should see something similar to the following. Note that LLMs by nature are 
 
 image::parasol-chat-response.webp[width=350]
 
-What we've already started to do is provide contextual information about the claim in each conversation with the LLM using Prompt Engineering. But unfortunately, the chatbot doesn't know how much it costs to repair a flux capacitor, or any domain-specific knowledge for our organization. With InstructLab and RHEL AI, we can change that by teaching the model!
-What we've already started to do is provide contextual information about the claim in each conversation with the LLM using Prompt Engineering. But unfortunately, the chatbot doesn't know how much it costs to repair a flux capacitor, or any domain-specific knowledge for our organization. With InstructLab and RHEL AI, we can change that by teaching the model!
+What we've already started to do is provide contextual information about the claim in each conversation with the LLM using Prompt Engineering. But unfortunately, the chatbot doesn't know how much it costs to repair a flux capacitor, nor will it have any domain-specific knowledge for our organization. With InstructLab and RHEL AI, we can change that by teaching the model!
+
 
 [#taxononmy]
 === Understanding the Taxonomy
@@ -376,15 +381,12 @@ What we've already started to do is provide contextual information about the cla
 InstructLab uses a novel synthetic data-based alignment tuning method for Large Language Models (LLMs.) The "lab" in InstructLab stands for **L**arge-scale **A**lignment for Chat **B**ots. The LAB method is driven by taxonomies, which are largely created manually and with care.
 
 InstructLab crowdsources the process of tuning and improving models by collecting two types of data: knowledge and skills in the new InstructLab open source community. These submissions are collected in a taxonomy of YAML files to be used in the synthetic data generation process. To help you understand the directory structure of a taxonomy, please refer to the following image.
-InstructLab crowdsources the process of tuning and improving models by collecting two types of data: knowledge and skills in the new InstructLab open source community. These submissions are collected in a taxonomy of YAML files to be used in the synthetic data generation process. To help you understand the directory structure of a taxonomy, please refer to the following image.
 
 image::taxonomy.png[]
 
 We are now going to leverage the taxonomy model to teach the model knowledge about a specific vehicle we cover and its details, from our organization's collection of public (and private) internal data.
 
-Navigate back to the *Terminals* view. In the terminal window where you are running chat, enter `exit` to quit the chat session.
 
-. Navigate to the taxonomy directory.
 Navigate back to the *Terminals* view. In the terminal window where you are running chat, enter `exit` to quit the chat session.
 
 . Navigate to the taxonomy directory.
@@ -428,7 +430,6 @@ The way the taxonomy approach works is that we provide a file, named `qna.yaml`,
 The `qna.yaml` file is placed in a folder within the `knowledge` subdirectory of the taxonomy directory. It is placed in a folder with an appropriate name that is aligned with the data topic, as you will see in the below command.
 
 [start=4]
-. Instead of having to type a bunch of information in by hand, simply run the following command to copy this example https://raw.githubusercontent.com/rhai-code/backToTheFuture/main/qna.yaml[`qna.yaml`] file to your taxonomy directory:
 . Instead of having to type a bunch of information in by hand, simply run the following command to copy this example https://raw.githubusercontent.com/rhai-code/backToTheFuture/main/qna.yaml[`qna.yaml`] file to your taxonomy directory:
 
 [source,sh,role=execute,subs=attributes+]
@@ -487,15 +488,18 @@ document:
     - data.md
 ----
 
-<1> `created_by`: The author of the contribution, typically a GitHub username
-<2> `domain`: Category of the knowledge
-<3> `seed_examples`: Five or more examples sourced from the provided knowledge documents, representing a `question` for the model and desired `response`
-<4> `task_description`: An optional description of the knowledge for easily understanding the specific knowledge contribution
+<1> `domain`: Category of the knowledge
+<2> `created_by`: The author of the contribution, typically a GitHub username
+<3> `seed_examples`: A collection of 5 key/value entries. Each entry includes a `context`, which is a chunk of information from your markdown knowledge document, and at least 3 question and answer pairs related to the context block.
+<4> `document_outline`: Provides an overview of the document you are submitting.
 <5> `document`: The source of your knowledge contribution, consisting of a `repo` URL pointing to the knowlege markdown files, and `commit` SHA that contains the specific files
 <6> `patterns`: A list of glob patterns specifying the markdown file(s) in your repository.
 
+
+Now, it's time to verify that the seed data is curated properly.
+
 [start=6]
-. Now, it's time to verify that the seed data is curated properly.
+. Validate your taxonomy
 
 InstructLab allows you to validate your taxonomy files before generating additional data. You can accomplish this by using the `ilab taxonomy diff` command as shown below:
 
@@ -516,7 +520,7 @@ Taxonomy in /home/instruct/.local/share/instructlab/taxonomy is valid :)
 [#synthetic_data]
 === Generating Synthetic Data
 
-Okay, so far so good. Now, let’s move on to the AWESOME part. We are going to use our taxonomy, which contains our `qna.yaml` file, to have the LLM automatically generate more examples. The generate step can often take a while and is dependent on the number of instructions that you want to generate. In other words, this means that InstructLab will generate X number of additional questions and answers based on the samples provided. To give you an idea of how long this takes, generating 100 additional questions and answers typically takes about 7 minutes when using a nicely specced consumer-grade GPU-accelerated Linux machine. This can take around 15 minutes using Apple Silicon and depends on many factors. For the purpose of this workshop, we are only going to generate 5 additional samples. To do this, issue the following commands:
+Okay, so far so good. Now, let’s move on to the AWESOME part. We are going to use our taxonomy, which contains our `qna.yaml` file, to have the LLM automatically generate more examples. The generate step can often take a while and is dependent on the number of instructions that you want to generate. In other words, this means that InstructLab will generate X number of additional questions and answers based on the samples provided. To give you an idea of how long this takes, generating 100 additional questions and answers typically takes about 7 minutes when using a nicely specced consumer-grade GPU-accelerated Linux machine. This can take around 15 minutes using Apple Silicon and depends on many factors. For the purpose of this workshop, we are only going to generate a small amount of additional samples to give you a sense of how it works. To do this, issue the following commands:
 
 . We will now run the command to generate data in the current terminal. The other terminal should still be serving the Granite model from earlier. If the model is no longer being served, serve the model again with the following command (in the other terminal window):
 
@@ -558,38 +562,33 @@ NOTE: Training using the newly generated data is a time and resource intensive t
 [#training]
 === Training and Interacting with the Model
 
-Due to the time constraints of this lab, we will not actually be training the model. A trained model will be provided for you. However, to illustrate how training works, you would issue the following command:
+Due to the time constraints of this lab, we will not actually be training the model. A trained model will be provided for you. However, to illustrate how training works, you would issue an `ilab model train` command with various parameters. 
 
-[source,sh,subs=attributes+]
-----
-ilab model train --device cuda
-----
+// If we were training the model during this workshop, you would see the following output: 
 
-If we were really training the model, you would see the following output: 
+// [source,sh]
+// ----
+// LINUX_TRAIN.PY: NUM EPOCHS IS:  1
+// LINUX_TRAIN.PY: TRAIN FILE IS:  taxonomy_data/train_gen.jsonl
+// LINUX_TRAIN.PY: TEST FILE IS:  taxonomy_data/test_gen.jsonl
+// LINUX_TRAIN.PY: Using device 'cuda:0'
+//   NVidia CUDA version: 12.1
+//   AMD ROCm HIP version: n/a
+//   cuda:0 is 'NVIDIA A10G' (15.3 GiB of 22.1 GiB free, capability: 8.6)
+//   WARNING: You have less than 18253611008 GiB of free GPU memory on '{index}'. Training may fail, use slow shared host memory, or move some layers to CPU.
+//   Training does not use the local InstructLab serve. Consider stopping the server to free up about 5 GiB of GPU memory.
+// LINUX_TRAIN.PY: LOADING DATASETS
+// Generating train split: 5 examples [00:00, 265.43 examples/s]
+// Generating train split: 7 examples [00:00, 6582.99 examples/s]
+// /home/instruct/instructlab/venv/lib64/python3.11/site-packages/huggingface_hub/file_download.py:1150: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
+//   warnings.warn(
+// Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+// LINUX_TRAIN.PY: NOT USING 4-bit quantization
+// LINUX_TRAIN.PY: LOADING THE BASE MODEL
+// Loading checkpoint shards: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [00:00<00:00,  5.95it/s]
+// ----
 
-[source,sh]
-----
-LINUX_TRAIN.PY: NUM EPOCHS IS:  1
-LINUX_TRAIN.PY: TRAIN FILE IS:  taxonomy_data/train_gen.jsonl
-LINUX_TRAIN.PY: TEST FILE IS:  taxonomy_data/test_gen.jsonl
-LINUX_TRAIN.PY: Using device 'cuda:0'
-  NVidia CUDA version: 12.1
-  AMD ROCm HIP version: n/a
-  cuda:0 is 'NVIDIA A10G' (15.3 GiB of 22.1 GiB free, capability: 8.6)
-  WARNING: You have less than 18253611008 GiB of free GPU memory on '{index}'. Training may fail, use slow shared host memory, or move some layers to CPU.
-  Training does not use the local InstructLab serve. Consider stopping the server to free up about 5 GiB of GPU memory.
-LINUX_TRAIN.PY: LOADING DATASETS
-Generating train split: 5 examples [00:00, 265.43 examples/s]
-Generating train split: 7 examples [00:00, 6582.99 examples/s]
-/home/instruct/instructlab/venv/lib64/python3.11/site-packages/huggingface_hub/file_download.py:1150: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
-  warnings.warn(
-Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-LINUX_TRAIN.PY: NOT USING 4-bit quantization
-LINUX_TRAIN.PY: LOADING THE BASE MODEL
-Loading checkpoint shards: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [00:00<00:00,  5.95it/s]
-----
-
-. Since this process will take over an hour to complete we have provided a model that has already been through this process. First, let's stop the current model server in the *upper* window, with bd:[CTRL+C]) on the keyboard. In order to serve the newly trained model you can now run the following in the *upper* command window:
+. Since this process will take over an hour to complete we have provided a model that has already been through this process. First, let's stop the current model server in the *upper* window, with kbd:[CTRL+C] on the keyboard. In order to serve the newly trained model you can now run the following in the *upper* command window:
 
 [source,sh,role=execute,subs=attributes+]
 ----
@@ -638,4 +637,4 @@ Start playing with both skill and knowledge additions. This is to give something
 
 As you can see, InstructLab is pretty straightforward and most of the time you spend will be on curating new taxonomy content. Again, we’re so happy you made it this far, and remember if you have questions we are here to help, and are excited to see what you come up with!
 
-Please visit the official project github at https://github.com/instructlab[www.github.com/instructlab] and check out the community repo to learn about how to get involved with the upstream community! Also, https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux/ai[learn more about RHEL AI here] (which includes support for InstructLab, idemification for model output with the Granite family of models, and a platform to run AI your own way on the hybrid cloud).
+Please visit the official project github at https://github.com/instructlab[www.github.com/instructlab] and check out the community repo to learn about how to get involved with the upstream community! Also, https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux/ai[learn more about RHEL AI here] (which includes support for InstructLab, idemification for model output for the included Granite large language models, and a platform to run AI your own way on the hybrid cloud).
