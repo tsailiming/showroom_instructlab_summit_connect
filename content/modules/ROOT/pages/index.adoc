@@ -85,7 +85,7 @@ source venv/bin/activate
 +
 .Your prompt should now look like this
 
-[subs=quotes]
+[source,sh,role=execute,subs=attributes+]
 ----
 (venv) [instruct@instructlab instructlab]$
 ----
@@ -116,7 +116,7 @@ ilab
 Assuming that everything has been installed correctly, you should see the following output:
 +
 
-[subs=quotes]
+[subs:quotes]
 ----
 Usage: ilab [OPTIONS] COMMAND [ARGS]...
 
@@ -124,7 +124,7 @@ Usage: ilab [OPTIONS] COMMAND [ARGS]...
   CLI for interacting with InstructLab.
 
 
-  If this is your first time running ilab, it's best to start with `ilab config config init`
+  If this is your first time running ilab, it's best to start with `ilab config init`
   to create the environment.
 
 
@@ -171,7 +171,7 @@ Now that we know that the command-line interface `ilab` is working correctly, th
 ilab config init
 ----
 
-You should see the following output (press Enter for defaults):
+You should see the following output (press kbd:[ENTER] for defaults):
 
 [subs=quotes]
 ----
@@ -212,7 +212,7 @@ Initialization completed successfully, you're ready to start using `ilab`. Enjoy
 [#download]
 === Download the model
 
-With the InstructLab environment configured, you will now download a quantized (compressed and optimized) model to your local directory, to be used as a model server for API requests, or to help train a new model as we'll do in this workshop. 
+With the InstructLab environment configured, you will now download a quantized (compressed and optimized) model to your local directory, to be used as a model server for API requests, or to help train a new model.
 
 NOTE: We are using a quantized model because we are only leveraging a single GPU for this lab. For better performance or production use cases, you would use unquantized models.
 
@@ -290,7 +290,7 @@ Because you’re serving the model in one terminal window, you will have to use 
 cd ~/instructlab
 source venv/bin/activate
 ----
-.Your Prompt should now look like this
+.Your prompt should now look like this
 [source,sh]
 ----
 (venv) [instruct@instructlab instructlab]$ 
@@ -316,11 +316,11 @@ You should see a chat prompt like the example below.
 
 [start=3]
 . At this point, you can interact with the model by asking it a question. Example:
-What is openshift in 20 words or less?
+What is OpenShift in 20 words or less?
 
 [source,sh,role=execute,subs=attributes+]
 ----
-What is openshift in 20 words or less?
+What is OpenShift in 20 words or less?
 ----
 
 Wait, wut? That was AWESOME!!!!! You now have your own local LLM running on this machine. That was pretty easy, huh?
@@ -380,7 +380,7 @@ What we've already started to do is provide contextual information about the cla
 
 InstructLab uses a novel synthetic data-based alignment tuning method for Large Language Models (LLMs.) The "lab" in InstructLab stands for **L**arge-scale **A**lignment for Chat **B**ots. The LAB method is driven by taxonomies, which are largely created manually and with care.
 
-InstructLab crowdsources the process of tuning and improving models by collecting two types of data: knowledge and skills in the new InstructLab open source community. These submissions are collected in a taxonomy of YAML files to be used in the synthetic data generation process. To help you understand the directory structure of a taxonomy, please refer to the following image.
+InstructLab crowdsources the process of tuning and improving models by collecting two types of data: knowledge and skills, in the new InstructLab open source community. These submissions are collected in a taxonomy of YAML files to be used in the synthetic data generation process. To help you understand the directory structure of a taxonomy, please refer to the following image.
 
 image::taxonomy.png[]
 
@@ -415,7 +415,7 @@ taxonomy
 Now, we need to create a directory where we can place our files.
 
 [start=2]
-. Create a directory to add new knowledge showing how to properly generate a knowledge on Instructlab 
+. Create a directory to add new knowledge, demonstrating how to properly use the taxonomy structure to add knowledge with InstructLab. 
 
 [source,sh,role=execute,subs=attributes+]
 ----
@@ -522,14 +522,14 @@ Taxonomy in /home/instruct/.local/share/instructlab/taxonomy is valid :)
 
 Okay, so far so good. Now, let’s move on to the AWESOME part. We are going to use our taxonomy, which contains our `qna.yaml` file, to have the LLM automatically generate more examples. The generate step can often take a while and is dependent on the number of instructions that you want to generate. In other words, this means that InstructLab will generate X number of additional questions and answers based on the samples provided. To give you an idea of how long this takes, generating 100 additional questions and answers typically takes about 7 minutes when using a nicely specced consumer-grade GPU-accelerated Linux machine. This can take around 15 minutes using Apple Silicon and depends on many factors. For the purpose of this workshop, we are only going to generate a small amount of additional samples to give you a sense of how it works. To do this, issue the following commands:
 
-. We will now run the command to generate data in the current terminal. The other terminal should still be serving the Granite model from earlier. If the model is no longer being served, serve the model again with the following command (in the other terminal window):
+// . We will now run the command to generate data in the current terminal. The other terminal should still be serving the Granite model from earlier. If the model is no longer being served, serve the model again with the following command (in the other terminal window):
 
-[source,sh,role=execute,subs=attributes+]
-----
-ilab model serve --model-path /home/instruct/.cache/instructlab/models/granite-7b-lab-Q4_K_M.gguf
-----
+// [source,sh,role=execute,subs=attributes+]
+// ----
+// ilab model serve --model-path /home/instruct/.cache/instructlab/models/granite-7b-lab-Q4_K_M.gguf
+// ----
 
-Now run the following command in the terminal window that is not serving the model:
+// Now run the following command in the terminal window that is not serving the model:
 
 [source,sh,role=execute,subs=attributes+]
 ----
