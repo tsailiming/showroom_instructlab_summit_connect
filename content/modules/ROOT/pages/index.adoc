@@ -195,7 +195,7 @@ Initialization completed successfully, you're ready to start using `ilab`. Enjoy
 [#download]
 === Download the model
 
-With the InstructLab environment configured, you will now download a quantized (compressed and optimized) model to your local directory, to be used as a model server for API requests, or to help train a new model.
+With the InstructLab environment configured, you will now download two different quantized (compressed and optimized) models to your local directory. Granite will be used as a model server for API requests, and Merlinite will help create synthetic data to train a new model.
 
 NOTE: We are using quantized models because we are only leveraging a single GPU for this lab. For better performance or production use cases, you would use unquantized models.
 
@@ -273,7 +273,7 @@ INFO 2024-09-10 18:12:16,026 instructlab.model.backends.llama_cpp:194: After app
 [#chat]
 === Chat with the model
 
-Because you’re serving the model in one terminal window, you will have to use a separate terminal window and re-activate your Python virtual environment to run the ilab chat command. 
+Because you’re serving the model in one terminal window, you will have to use a separate terminal window and re-activate your Python virtual environment to run the `ilab chat` command and communicate with the model you are serving.
 
 . In the *bottom* terminal window, issue the following commands:
 
@@ -282,6 +282,7 @@ Because you’re serving the model in one terminal window, you will have to use 
 cd ~/instructlab
 source venv/bin/activate
 ----
+
 .Your prompt should now look like this
 [source,console]
 ----
@@ -372,9 +373,11 @@ With InstructLab and RHEL AI, we can change that by teaching the model!
 [#taxononmy]
 === Understanding the Taxonomy
 
-InstructLab uses a novel synthetic data-based alignment tuning method for Large Language Models (LLMs.) The "lab" in InstructLab stands for **L**arge-scale **A**lignment for Chat **B**ots. The LAB method is driven by taxonomies, which are largely created manually and with care.
+InstructLab uses a novel synthetic data-based alignment tuning method for Large Language Models (LLMs.) The "lab" in InstructLab stands for **L**arge-scale **A**lignment for Chat **B**ots. 
 
-InstructLab crowdsources the process of tuning and improving models by collecting two types of data: knowledge and skills, in the new InstructLab open source community. These submissions are collected in a taxonomy of YAML files to be used in the synthetic data generation process. To help you understand the directory structure of a taxonomy, please refer to the following image.
+The LAB method is driven by taxonomies, which are largely created manually and with care.
+
+InstructLab crowdsources the process of tuning and improving models by collecting two types of data: **knowledge** and **skills**, in the new InstructLab open source community. These submissions are collected in a taxonomy of YAML files to be used in the synthetic data generation process. To help you understand the directory structure of a taxonomy, please refer to the following image.
 
 image::taxonomy.png[]
 
@@ -482,13 +485,19 @@ document:
     - data.md
 ----
 
-<1> `domain`: Category of the knowledge
-<2> `created_by`: The author of the contribution, typically a GitHub username
-<3> `seed_examples`: A collection of 5 key/value entries. Each entry includes a `context`, which is a chunk of information from your markdown knowledge document, and at least 3 question and answer pairs related to the context block.
-<4> `document_outline`: Provides an overview of the document you are submitting.
-<5> `document`: The source of your knowledge contribution, consisting of a `repo` URL pointing to the knowlege markdown files, and `commit` SHA that contains the specific files
-<6> `patterns`: A list of glob patterns specifying the markdown file(s) in your repository.
-
+. `**version**`: The version of the qna.yaml file, this is the format of the file used for SDG. The value must be the number 3.
+. `**created_by**`: Your GitHub username.
+. `**domain**`: Specify the category of the knowledge.
+. `**seed_examples**`: A collection of key/value entries.
+.. `**context**`: A chunk of information from the knowledge document. Each qna.yaml needs five context blocks and has a maximum word count of 500 words.
+.. `**questions_and_answers**`: The parameter that holds your questions and answers
+... `**question**`: Specify a question for the model. Each qna.yaml file needs at least three question and answer pairs per context chunk with a maximum word count of 250 words.
+... `**answer**`: Specify the desired answer from the model. Each qna.yaml file needs at least three question and answer pairs per context chunk with a maximum word count of 250 words.
+. `**document_outline**`: Describe an overview of the document your submitting.
+. `**document**`: The source of your knowledge contribution.
+.. `**repo**`: The URL to your repository that holds your knowledge markdown files.
+.. `**commit**`: The SHA of the commit in your repository with your knowledge markdown files.
+.. `**patterns**`: A list of glob patterns specifying the markdown files in your repository. Any glob pattern that starts with *, such as *.md, must be quoted due to YAML rules. For example, *.md.
 
 Now, it's time to verify that the seed data is curated properly.
 
@@ -497,7 +506,7 @@ Now, it's time to verify that the seed data is curated properly.
 
 InstructLab allows you to validate your taxonomy files before generating additional data. You can accomplish this by using the `ilab taxonomy diff` command as shown below:
 
-NOTE: Make sure you are still in the virtual environment indicated by the (venv) on the command line. If not, source the venv/bin/activate file again.
+NOTE: Make sure you are still in the virtual environment indicated by the (venv) on the command line. If not, source the `venv/bin/activate` file again.
 
 [source,console,role=execute,subs=attributes+]
 ----
@@ -514,25 +523,26 @@ Taxonomy in /home/instruct/.local/share/instructlab/taxonomy is valid :)
 [#synthetic_data]
 === Generating Synthetic Data
 
-Okay, so far so good. Now, let’s move on to the AWESOME part. We are going to use our taxonomy, which contains our `qna.yaml` file, to have the LLM automatically generate more examples. The generate step can often take a while and is dependent on the number of instructions that you want to generate. In other words, this means that InstructLab will generate X number of additional questions and answers based on the samples provided. To give you an idea of how long this takes, generating 100 additional questions and answers typically takes about 7 minutes when using a nicely specced consumer-grade GPU-accelerated Linux machine. This can take around 15 minutes using Apple Silicon and depends on many factors. For the purpose of this workshop, we are only going to generate a small amount of additional samples to give you a sense of how it works. To do this, issue the following commands:
+Okay, so far so good. Now, let’s move on to the AWESOME part. We are going to use our taxonomy, which contains our `qna.yaml` file, to have the LLM automatically generate more examples. The generate step can often take a while and is dependent on your hardware and the amount of synthetic data that you want to generate. 
 
-// . We will now run the command to generate data in the current terminal. The other terminal should still be serving the Granite model from earlier. If the model is no longer being served, serve the model again with the following command (in the other terminal window):
+InstructLab will generate X number of additional questions and answers based on the samples provided. To give you an idea, it takes 7 minutes when running the default full synthetic data generation pipeline at a scale factor of 30. This can take around 15 minutes using Apple Silicon and depends on many factors. You could customize the scale factor or run a simple pipeline to take less time or if you have lesser hardware, but it is not recommended as it will not generate the optimal output.
 
-// [source,sh,role=execute,subs=attributes+]
-// ----
-// ilab model serve --model-path /home/instruct/.cache/instructlab/models/granite-7b-lab-Q4_K_M.gguf
-// ----
+However, for the purpose of this workshop we will only generate a small amount of additional samples to give you a sense of how it works.
 
-// Now run the following command in the terminal window that is not serving the model:
+NOTE: If needed, stop serving the Granite model by typing kbd:[CTRL+C] in the terminal within which it is running.
 
-NOTE: Stop serving the Granite model by typing kbd:[CTRL+C] in the terminal within which it is running.
+We will now run the command (in the second, **bottom** Terminal) to generate the synthetic data. The merlinite model will serve as the **teacher** model:
 
 [source,console,role=execute,subs=attributes+]
 ----
 ilab data generate --model /home/instruct/.cache/instructlab/models/merlinite-7b-lab-Q4_K_M.gguf --sdg-scale-factor 5 --pipeline simple --gpus 1
 ----
 
-After running this command, you should see InstructLab is now synthetically generating examples based on the seed data you provided in the `qna.yaml` file. You will see output on your screen indicating the data is being generated as shown below:
+After running this command, the magic begins!
+
+InstructLab is now synthetically generating data based on the seed data you provided in the `qna.yaml` file. 
+
+You will see output on your screen indicating the data is being generated as shown below:
 
 [source,console]
 ----
@@ -553,7 +563,7 @@ If you are curious to view the data generated, the SDG process creates a jsonl f
 
 Feel free to explore:
 
-[source,console,role=execute,subs=attributes+]
+[source,console]
 ----
 cat /home/instruct/.local/share/instructlab/datasets/knowledge_train_msgs[YOUR_TIMESTAMP].jsonl
 ----
@@ -567,31 +577,7 @@ NOTE: Training using the newly generated data is a time and resource intensive t
 [#training]
 === Training and Interacting with the Model
 
-Due to the time constraints of this lab, we will not actually be training the model. A trained model is provided for you.
-
-// If we were training the model during this workshop, you would see the following output: 
-
-// [source,sh]
-// ----
-// LINUX_TRAIN.PY: NUM EPOCHS IS:  1
-// LINUX_TRAIN.PY: TRAIN FILE IS:  taxonomy_data/train_gen.jsonl
-// LINUX_TRAIN.PY: TEST FILE IS:  taxonomy_data/test_gen.jsonl
-// LINUX_TRAIN.PY: Using device 'cuda:0'
-//   NVidia CUDA version: 12.1
-//   AMD ROCm HIP version: n/a
-//   cuda:0 is 'NVIDIA A10G' (15.3 GiB of 22.1 GiB free, capability: 8.6)
-//   WARNING: You have less than 18253611008 GiB of free GPU memory on '{index}'. Training may fail, use slow shared host memory, or move some layers to CPU.
-//   Training does not use the local InstructLab serve. Consider stopping the server to free up about 5 GiB of GPU memory.
-// LINUX_TRAIN.PY: LOADING DATASETS
-// Generating train split: 5 examples [00:00, 265.43 examples/s]
-// Generating train split: 7 examples [00:00, 6582.99 examples/s]
-// /home/instruct/instructlab/venv/lib64/python3.11/site-packages/huggingface_hub/file_download.py:1150: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
-//   warnings.warn(
-// Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
-// LINUX_TRAIN.PY: NOT USING 4-bit quantization
-// LINUX_TRAIN.PY: LOADING THE BASE MODEL
-// Loading checkpoint shards: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [00:00<00:00,  5.95it/s]
-// ----
+Due to the time constraints of this lab, we will not actually be training the model! This would require a full-scale synthetic data generation process and a training run that could take many hours. You probably have smoewhere else you need to be, so we are going to show you the end results without making you wait.
 
 . We have provided a model that has already been through this process in your demo system. First, if you have any processes running in either terminal window, type kbd:[CTRL+C] to exit. In order to serve the newly trained model you can now run the following in the *upper* command window:
 
