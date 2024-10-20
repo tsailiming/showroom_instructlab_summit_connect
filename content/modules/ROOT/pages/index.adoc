@@ -54,6 +54,7 @@ As you work with InstructLab, you will see the terms Skills and Knowledge. What 
 [#getting_started]
 == Getting started with InstructLab
 
+[#installation]
 === Install the ilab command line interface
 
 We created a CLI tool called https://github.com/instructlab/instructlab[ilab] that implements a local LLM developer experience and workflow. The ilab CLI is written in Python and works on the following architectures:
@@ -69,7 +70,7 @@ During this lab, we will be using the ilab command line tools on a Red Hat Enter
 . Approximately 60GB disk space (entire process)
 .. Disk space requirements are dependent on several factors. Keep in mind that we will be generating data to feed to the model while also having the model locally on our system. For example, the model we are working with during this workshop is roughly 5gb in size.
 
-[#installation]
+[#configuration]
 === Configuring ilab
 
 The first thing we need to do is to source a Python virtual environment that will allow us to interact with the InstructLab command line tools. While you have two terminal windows available on your right, let's start with the *upper* window. 
@@ -90,18 +91,6 @@ source venv/bin/activate
 (venv) [instruct@bastion instructlab]$
 ----
 +
-
-// . Install the command line tool using the pip command
-// +
-
-// [source,sh,role=execute,subs=attributes+]
-// ----
-// pip3 install git+https://github.com/instructlab/instructlab.git@v0.18.4
-
-// ----
-// +
-
-// NOTE: `pip install` may take some time, depending on the internet connection available at the conference or if the files have been cached locally.
 
 [start=2]
 . InstructLab is already pre-installed. From your venv environment, verify ilab is installed correctly by running the ilab command.
@@ -370,7 +359,7 @@ What we've already started to do is provide contextual information about the cla
 With InstructLab and RHEL AI, we can change that by teaching the model!
 
 
-[#taxononmy]
+[#taxonomy]
 === Understanding the Taxonomy
 
 InstructLab uses a novel synthetic data-based alignment tuning method for Large Language Models (LLMs.) The "lab" in InstructLab stands for **L**arge-scale **A**lignment for Chat **B**ots. 
@@ -520,7 +509,7 @@ knowledge/parasol/claims/qna.yaml
 Taxonomy in /home/instruct/.local/share/instructlab/taxonomy is valid :)
 ----
 
-[#synthetic_data]
+[#sdg]
 === Generating Synthetic Data
 
 Okay, so far so good. Now, let’s move on to the AWESOME part. We are going to use our taxonomy, which contains our `qna.yaml` file, to have the LLM automatically generate more examples. The generate step can often take a while and is dependent on your hardware and the amount of synthetic data that you want to generate. 
@@ -574,8 +563,8 @@ Once the new data has been generated, the next step is to train the model with t
 
 NOTE: Training using the newly generated data is a time and resource intensive task. Depending on the number of epochs desired, internet connection for safetensor downloading, and other factors, it can take many hours and is highly dependent on the hardware used. 
 
-[#training]
-=== Training and Interacting with the Model
+[#changing_model]
+== Enhancing a LLM with InstructLab
 
 Due to the time constraints of this lab, we will not actually be training the model! This would require a full-scale synthetic data generation process and a training run that could take many hours. You probably have smoewhere else you need to be, so we are going to show you the end results without making you wait.
 
