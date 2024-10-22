@@ -535,13 +535,12 @@ You will see output on your screen indicating the data is being generated as sho
 
 [source,console]
 ----
-INFO 2024-09-10 20:00:59,404 numexpr.utils:148: Note: NumExpr detected 48 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
-INFO 2024-09-10 20:00:59,404 numexpr.utils:161: NumExpr defaulting to 16 threads.
-INFO 2024-09-10 20:00:59,675 datasets:59: PyTorch version 2.3.1 available.
-INFO 2024-09-10 20:01:00,546 instructlab.model.backends.llama_cpp:104: Trying to connect to model server at http://127.0.0.1:8000/v1
-WARNING 2024-09-10 20:01:00,555 instructlab.data.generate:291: Disabling SDG batching - unsupported with llama.cpp serving
-Generating synthetic data using 'simple' pipeline, '/home/instruct/.cache/instructlab/models/merlinite-7b-lab-Q4_K_M.gguf' model, '/home/instruct/.local/share/instructlab/taxonomy' taxonomy, against http://127.0.0.1:8000/v1 server
-INFO 2024-09-10 20:01:00,870 instructlab.sdg:375: Synthesizing new instructions. If you aren't satisfied with the generated instructions, interrupt training (Ctrl-C) and try adjusting your YAML files. Adding more examples may help.
+INFO 2024-10-21 02:01:23,450 instructlab.sdg.llmblock:51: LLM server supports batched inputs: False
+INFO 2024-10-21 02:01:23,450 instructlab.sdg.pipeline:197: Running block: gen_knowledge
+INFO 2024-10-21 02:01:23,450 instructlab.sdg.pipeline:198: Dataset({
+    features: ['icl_document', 'document', 'document_outline', 'domain', 'icl_query_1', 'icl_query_2', 'icl_query_3', 'icl_response_1', 'icl_response_2', 'icl_response_3'],
+    num_rows: 10
+})
 ----
 
 This will take several minutes to complete.
@@ -550,7 +549,7 @@ Once the process completes and we have generated additional data, we can use the
 
 If you are curious to view the data generated, the SDG process creates a jsonl file located in the `/home/instruct/.local/share/instructlab/datasets` directory named knowledge_train_msgs[TIMESTAMP].jsonl
 
-Feel free to explore:
+Feel free to explore. You must input your exact file name in the following command:
 
 [source,console]
 ----
