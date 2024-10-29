@@ -1,4 +1,4 @@
-= RHEL AI and InstructLab: Get a taste in training your own model
+= Advanced InstructLab Workshop: Training a custom LLM for the Parasol Insurance Company
 
 :experimental: true
 :imagesdir: ../assets/images
@@ -7,7 +7,9 @@
 
 == Introduction to the Lab
 
-Thanks for taking the time to learn about and use RHEL AI at Red Hat Summit Connect. During this hands-on exercise, you will learn what https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux/ai[RHEL AI] is and how you can use it to provide value to your company. You will also learn how to leverage RHEL AI to improve a Large Language Model (LLM), and train it using synthetic data generation.  RHEL AI consists of several core components:
+Thanks for taking the time to learn about and use InstructLab. During this hands-on exercise, you will learn what InstructLab is and how you can use it to provide value to your company. InstructLab is a core component of https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux/ai[RHEL AI], and can be used to contribute to and improve a Large Language Model (LLM). 
+
+RHEL AI consists of several core components:
 
 . https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux/image-mode[RHEL Image Mode]
 . The https://www.ibm.com/granite[Granite] Large Language Model(s)
@@ -310,7 +312,7 @@ Wait, wut? That was AWESOME!!!!! You now have your own local LLM running on this
 [#integrating_instructlab]
 == Integrating AI into an Insurance Application
 
-The previous section showed you the basics of how to interact with InstructLab. Now let's take things a step further by using InstructLab with an example application. We will use RHEL AI to leverage the Granite LLM, add additional data in the form of knowledge and/or skills, train the model with new knowledge and enable it to answer questions effectively. This is done in the context of Parasol, a fictional company that processes insurance claims.
+The previous section showed you the basics of how to interact with InstructLab. Now let's take things a step further by using InstructLab with an example application. We will use InstructLab to leverage the Granite LLM, add additional data in the form of knowledge and/or skills, train the model with new knowledge and enable it to answer questions effectively. This is done in the context of Parasol, a fictional company that processes insurance claims.
 
 Parasol has a chatbot application infused with AI (the Granite model) to provide repair suggestions for claims submitted. This would allow Parasol to expedite processing of various claims on hold. But at the moment, the chatbot does not provide effective repair suggestions. Using historical claims data that contain different repairs performed under different conditions, we show how users can add this knowledge to the Granite model, train it on the additional knowledge and improve its recommendations.
 
