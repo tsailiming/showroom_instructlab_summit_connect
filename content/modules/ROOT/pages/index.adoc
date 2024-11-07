@@ -531,6 +531,8 @@ ilab data generate --model /home/instruct/.cache/instructlab/models/merlinite-7b
 
 After running this command, the magic begins!
 
+NOTE: You will see an `AssertionError` thrown before the SDG process begins. This does not impact the process so please continue without worry.
+
 InstructLab is now synthetically generating data based on the seed data you provided in the `qna.yaml` file. 
 
 You will see output on your screen indicating the data is being generated as shown below:
