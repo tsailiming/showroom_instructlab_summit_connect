@@ -554,6 +554,7 @@ Once the process completes and we have generated additional data, we can use the
 If you are curious to view the data generated, the SDG process creates a jsonl file located in the `/home/instruct/.local/share/instructlab/datasets` directory named knowledge_train_msgs[TIMESTAMP].jsonl
 
 TIP: JSONL files consist of multiple JSON objects, each on its own line.
+
 Feel free to explore. You must input your exact file name in the following command:
 
 [source,console]
@@ -608,7 +609,7 @@ INFO 2024-10-20 17:24:34,495 instructlab.model.backends.llama_cpp:190: After app
 [#verify]
 === Verifying the Application
 
-Now for the moment of truth. You’ve added knowledge, generated synthetic data, and retrained the model. Refresh your browser window where you were viewing Marty McFly’s claim in the Parasol insurance application
+Now for the moment of truth. You’ve added knowledge, generated synthetic data, and retrained the model. *Refresh your browser window* where you were viewing Marty McFly’s claim in the Parasol insurance application
 
 image::parasol-view.png[]
 
