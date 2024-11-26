@@ -7,7 +7,7 @@
 
 == Introduction to the Lab
 
-Thanks for taking the time to learn about and use InstructLab. During this hands-on exercise, you will learn what InstructLab is and how you can use it to provide value to your company. InstructLab is a core component of https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux/ai[RHEL AI], and can be used to contribute to and improve a Large Language Model (LLM). 
+Thanks for taking the time to learn about and use InstructLab. During this hands-on exercise, you will learn what InstructLab is and how you can use it to provide value to your company. InstructLab is a core component of https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux/ai[RHEL AI], and can be used to contribute to and improve a Large Language Model (LLM).
 
 RHEL AI consists of several core components:
 
@@ -75,7 +75,7 @@ During this lab, we will be using the ilab command line tools on a Red Hat Enter
 [#configuration]
 === Configuring ilab
 
-The first thing we need to do is to source a Python virtual environment that will allow us to interact with the InstructLab command line tools. While you have two terminal windows available on your right, let's start with the *upper* window. 
+The first thing we need to do is to source a Python virtual environment that will allow us to interact with the InstructLab command line tools. While you have two terminal windows available on your right, let's start with the *upper* window.
 
 . Navigate to the preset InstructLab folder and activate the python virtual environment by running the following commands:
 +
@@ -165,7 +165,7 @@ NOTE: You may hit kbd:[ENTER] for all default settings.
 
 [source,console,subs=quotes]
 ----
-Path to your model [/home/instruct/.cache/instructlab/models/merlinite-7b-lab-Q4_K_M.gguf]: 
+Path to your model [/home/instruct/.cache/instructlab/models/merlinite-7b-lab-Q4_K_M.gguf]:
 Generating `/home/instruct/.config/instructlab/config.yaml`...
 Detecting Hardware...
 We chose Nvidia 1x L4 as your designated training profile. This is for systems with 24 GB of vRAM.
@@ -218,7 +218,7 @@ Download complete. Moving file to /home/instruct/.cache/instructlab/models/grani
 INFO 2024-09-10 16:51:52,562 huggingface_hub.file_download:1924: Download complete. Moving file to /home/instruct/.cache/instructlab/models/granite-7b-lab-Q4_K_M.gguf
 ----
 
-Now the models are downloaded, we can serve and chat with the Granite model. Serving the model simply means we are going to run a server that will allow other programs to interact with the data similar to making an API call. 
+Now the models are downloaded, we can serve and chat with the Granite model. Serving the model simply means we are going to run a server that will allow other programs to interact with the data similar to making an API call.
 
 [#serve]
 === Serving the model
@@ -230,7 +230,7 @@ Let's serve the model by running the following command:
 ilab model serve --model-path /home/instruct/.cache/instructlab/models/granite-7b-lab-Q4_K_M.gguf
 ----
 
-As you can see, the serve command can take an optional `-–model-path` argument. In this case, we want to serve the Granite model. If no model path is provided, the default value from the config.yaml file will be used. 
+As you can see, the serve command can take an optional `-–model-path` argument. In this case, we want to serve the Granite model. If no model path is provided, the default value from the config.yaml file will be used.
 
 Once the model is served and ready, you’ll see the following output:
 
@@ -277,7 +277,7 @@ source venv/bin/activate
 .Your prompt should now look like this
 [source,console]
 ----
-(venv) [instruct@bastion instructlab]$ 
+(venv) [instruct@bastion instructlab]$
 ----
 
 [start=2]
@@ -293,9 +293,9 @@ You should see a chat prompt like the example below.
 [source,console]
 ----
 ╭───────────────────────────────────────────────────────────────────────────╮
-│ Welcome to InstructLab Chat w/ GRANITE-7B-LAB-Q4_K_M.GGUF (type /h for help)                                                                                                                            
+│ Welcome to InstructLab Chat w/ GRANITE-7B-LAB-Q4_K_M.GGUF (type /h for help)
 ╰───────────────────────────────────────────────────────────────────────────╯
->>> 
+>>>
 ----
 
 [start=3]
@@ -319,13 +319,13 @@ Parasol has a chatbot application infused with AI (the Granite model) to provide
 [#using_parasol_application]
 === Using the Parasol Application
 
-Let's start by taking a look at the current experience a claims agent has when interacting with the chatbot. 
+Let's start by taking a look at the current experience a claims agent has when interacting with the chatbot.
 
 . While you may currently be in the *Terminals* view, switch to *Parasol* (in the top bar above the upper terminal window) to see the Parasol company's claims application in your browser.
 
 image::parasol-view.png[]
 
-As a claims agent, you can navigate and view the existing claims by clicking on the claim number on the screen. 
+As a claims agent, you can navigate and view the existing claims by clicking on the claim number on the screen.
 
 [start=2]
 . For this lab we will be investigating *CLM195501* which is a claim that has been filed by Marty McFly, let's click on this claim now.
@@ -341,7 +341,7 @@ image::parasol-chat.webp[width=350]
 
 IMPORTANT: This chatbot is backed by the Granite model you served earlier, so if you killed that running process you will need to restart it in your terminal by running the following: `ilab model serve --model-path /home/instruct/.cache/instructlab/models/granite-7b-lab-Q4_K_M.gguf`
 
-Let's imagine as a claims agent you'd like to know how much it might cost to repair a flux capacitor on Marty's DeLorean. 
+Let's imagine as a claims agent you'd like to know how much it might cost to repair a flux capacitor on Marty's DeLorean.
 
 [start=4]
 . Ask the chatbot the following question:
@@ -356,7 +356,7 @@ You should see something similar to the following. Note that LLMs by nature are 
 
 image::parasol-chat-response.webp[width=350]
 
-What we've already started to do is provide contextual information about the claim in each conversation with the LLM using Prompt Engineering. But unfortunately, the chatbot doesn't know how much it costs to repair a flux capacitor, nor will it have any domain-specific knowledge for our organization. 
+What we've already started to do is provide contextual information about the claim in each conversation with the LLM using Prompt Engineering. But unfortunately, the chatbot doesn't know how much it costs to repair a flux capacitor, nor will it have any domain-specific knowledge for our organization.
 
 With InstructLab and RHEL AI, we can change that by teaching the model!
 
@@ -364,7 +364,7 @@ With InstructLab and RHEL AI, we can change that by teaching the model!
 [#taxonomy]
 === Understanding the Taxonomy
 
-InstructLab uses a novel synthetic data-based alignment tuning method for Large Language Models (LLMs.) The "lab" in InstructLab stands for **L**arge-scale **A**lignment for Chat **B**ots. 
+InstructLab uses a novel synthetic data-based alignment tuning method for Large Language Models (LLMs.) The "lab" in InstructLab stands for **L**arge-scale **A**lignment for Chat **B**ots.
 
 The LAB method is driven by taxonomies, which are largely created manually and with care.
 
@@ -403,7 +403,7 @@ taxonomy
 Now, we need to create a directory where we can place our files.
 
 [start=2]
-. Create a directory to add new knowledge, demonstrating how to properly use the taxonomy structure to add knowledge with InstructLab. 
+. Create a directory to add new knowledge, demonstrating how to properly use the taxonomy structure to add knowledge with InstructLab.
 
 [source,console,role=execute,subs=attributes+]
 ----
@@ -411,9 +411,9 @@ mkdir -p /home/instruct/.local/share/instructlab/taxonomy/knowledge/parasol/clai
 ----
 
 [start=3]
-. Add new capabilities to our model through new knowledge. 
+. Add new capabilities to our model through new knowledge.
 
-The way the taxonomy approach works is that we provide a file, named `qna.yaml`, that contains a sample data set of questions and answers. This data set will be used in the process of creating many more synthetic data examples, enough to fully influence the model's output. The important thing to understand about the `qna.yaml` file is that it must follow a specific schema for InstructLab to use it to synthetically generate more examples. 
+The way the taxonomy approach works is that we provide a file, named `qna.yaml`, that contains a sample data set of questions and answers. This data set will be used in the process of creating many more synthetic data examples, enough to fully influence the model's output. The important thing to understand about the `qna.yaml` file is that it must follow a specific schema for InstructLab to use it to synthetically generate more examples.
 
 The `qna.yaml` file is placed in a folder within the `knowledge` subdirectory of the taxonomy directory. It is placed in a folder with an appropriate name that is aligned with the data topic, as you will see in the below command.
 
@@ -435,7 +435,7 @@ head /home/instruct/.local/share/instructlab/taxonomy/knowledge/parasol/claims/q
 
 During this workshop, we don’t expect you to type all of this information in by hand - we are including the content here for your reference.
 
-It's a YAML file that consists of a list of Q&A examples that will be used by the trainer model to teach the student model. There is also a source document which is a link to a specific commit of a text file in git, where https://github.com/rhai-code/backToTheFuture/blob/main/data.md[we've included] that a flux capacitor costs an affordable $10,000,000. 
+It's a YAML file that consists of a list of Q&A examples that will be used by the trainer model to teach the student model. There is also a source document which is a link to a specific commit of a text file in git, where https://github.com/rhai-code/backToTheFuture/blob/main/data.md[we've included] that a flux capacitor costs an affordable $10,000,000.
 
 To help you understand the qna file format, we have included an excerpt of the file below. Feel free to view the entire file on the system with the following command:
 
@@ -484,7 +484,7 @@ document:
 .. `**questions_and_answers**`: The parameter that holds your questions and answers
 ... `**question**`: Specify a question for the model. Each qna.yaml file needs at least three question and answer pairs per context chunk with a maximum word count of 250 words.
 ... `**answer**`: Specify the desired answer from the model. Each qna.yaml file needs at least three question and answer pairs per context chunk with a maximum word count of 250 words.
-. `**document_outline**`: Describe an overview of the document your submitting.
+. `**document_outline**`: Describe an overview of the document you're submitting.
 . `**document**`: The source of your knowledge contribution.
 .. `**repo**`: The URL to your repository that holds your knowledge markdown files.
 .. `**commit**`: The SHA of the commit in your repository with your knowledge markdown files.
@@ -514,7 +514,7 @@ Taxonomy in /home/instruct/.local/share/instructlab/taxonomy is valid :)
 [#sdg]
 === Generating Synthetic Data
 
-Okay, so far so good. Now, let’s move on to the AWESOME part. We are going to use our taxonomy, which contains our `qna.yaml` file, to have the LLM automatically generate more examples. The generate step can often take a while and is dependent on your hardware and the amount of synthetic data that you want to generate. 
+Okay, so far so good. Now, let’s move on to the AWESOME part. We are going to use our taxonomy, which contains our `qna.yaml` file, to have the LLM automatically generate more examples. The generate step can often take a while and is dependent on your hardware and the amount of synthetic data that you want to generate.
 
 InstructLab will generate X number of additional questions and answers based on the samples provided. To give you an idea, it takes 7 minutes when running the default full synthetic data generation pipeline at a scale factor of 30. This can take around 15 minutes using Apple Silicon and depends on many factors. You could customize the scale factor or run a simple pipeline to take less time or if you have lesser hardware, but it is not recommended as it will not generate the optimal output.
 
@@ -533,7 +533,7 @@ After running this command, the magic begins!
 
 NOTE: You will see an `AssertionError` thrown before the SDG process begins. This does not impact the process so please continue without worry.
 
-InstructLab is now synthetically generating data based on the seed data you provided in the `qna.yaml` file. 
+InstructLab is now synthetically generating data based on the seed data you provided in the `qna.yaml` file.
 
 You will see output on your screen indicating the data is being generated as shown below:
 
@@ -564,7 +564,7 @@ NOTE: Using a scale factor of 5 is generally not enough synthetic data to effect
 
 Once the new data has been generated, the next step is to train the model with the updated knowledge. This is performed with the `ilab model train` command.
 
-NOTE: Training using the newly generated data is a time and resource intensive task. Depending on the number of epochs desired, internet connection for safetensor downloading, and other factors, it can take many hours and is highly dependent on the hardware used. 
+NOTE: Training using the newly generated data is a time and resource intensive task. Depending on the number of epochs desired, internet connection for safetensor downloading, and other factors, it can take many hours and is highly dependent on the hardware used.
 
 [#changing_model]
 == Enhancing a LLM with InstructLab
@@ -626,7 +626,7 @@ You should see something similar to the following (keep in mind that your output
 
 image::parasol-new-response.webp[width=350]
 
-CONGRATULATIONS! You just trained a chatbot for Parasol insurance and will make every claims agent’s life a little better! 
+CONGRATULATIONS! You just trained a chatbot for Parasol insurance and will make every claims agent’s life a little better!
 
 [#conclusion]
 == Conclusion
