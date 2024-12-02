@@ -569,6 +569,8 @@ Once the new data has been generated, the next step is to train the model with t
 [#changing_model]
 == Enhancing a LLM with InstructLab
 
+=== Train a new model
+
 NOTE: Training using the newly generated data is a time and resource intensive task. Depending on the number of epochs desired, internet connection for safetensor downloading, and other factors, it can take many hours and is highly dependent on the hardware used.
 
 To train the model, you will have to download the base model to start with. 
